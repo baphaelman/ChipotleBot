@@ -1,13 +1,17 @@
 import chess
 from MoveMaker import MoveMaker
+from typing import Tuple
 
 def playGame() -> chess.Outcome:
     board = chess.Board()
     outcome = None
+    move = None
 
     while not outcome:
-        print()
         print(board)
+        if move:
+            print(f"Computer played: {move}")
+        
         # my move
         my_move = input("Enter your move: ")
         board.push_san(my_move)
@@ -16,16 +20,17 @@ def playGame() -> chess.Outcome:
             outcome = board.outcome()
             break
         
+        print()
         # computer's move
-        outcome = playTurn(board)
+        move, outcome = playTurn(board)
 
     return outcome
 
-def playTurn(board) -> chess.Outcome:
+def playTurn(board) -> Tuple[chess.Move, chess.Outcome]:
     move = MoveMaker.make_move(board, 3)
     board.push(move)
 
-    return board.outcome()
+    return move, board.outcome()
 
 def printOutcome(outcome) -> None:
     outcome = "White" if outcome.winner == chess.WHITE else "Black"
