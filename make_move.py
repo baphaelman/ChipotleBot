@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Dict
 import chess
 from evaluate import Evaluator 
 
@@ -11,27 +11,26 @@ class MoveMaker:
     
     def make_move_helper(board: chess.Board, depth: int, my_move: bool=True) -> Tuple[chess.Move, int]:
         if depth == 0 or board.is_game_over():
-            return None, Evaluator.evaluate(board)
+            return None, Evaluator.univ_evaluate(board)
         
-        best_move: chess.Move = None
-        largest_eval: int = float('-inf') if my_move else float('inf') # NOT biggest. minimax, remember
+        moves_dict: Dict[int, chess.Move]  = {} # seems weird, but because key search is faster (right?)
 
         for move in board.legal_moves: # iterates through possible moves
             board.push(move)
-            curr_move, curr_eval = MoveMaker.make_move_helper(board, depth - 1, not my_move)
+            _, curr_eval = MoveMaker.make_move_helper(board, depth - 1, not my_move)
             board.pop()
 
-            if my_move: # i want the eval after I make my move to be as low as possible (opponent's turn)
-                if not best_move or curr_eval < largest_eval:
-                    largest_eval = curr_eval
-                    best_move = move
-            else: # if its my oppponent's turn, I want them to grant me the best position
-                if not best_move or curr_eval > largest_eval:
-                    largest_eval = curr_eval
-                    best_move = move
+            moves_dict[curr_eval] = move
         
-        # print(f'best move:  {best_move}  and largest eval:  {largest_eval}')
-        return best_move, largest_eval
+        # print(f'moves depth {depth}: {moves_dict}')
+        if my_move:
+            most_significant_eval = max(moves_dict)
+            best_move = moves_dict[most_significant_eval]
+        else:
+            most_significant_eval = min(moves_dict)
+            best_move = moves_dict[most_significant_eval]
+        
+        return best_move, most_significant_eval
 
 def main():
     board = chess.Board()
@@ -47,8 +46,10 @@ def main():
 
 def test():
     board = chess.Board()
+    board.push_san("d4")
+    board.push_san("a5")
     board.push_san("e4")
-    board.push_san("d5")
+    board.push_san("Ra6")
     print(MoveMaker.make_move(board, 1))
     print(MoveMaker.make_move(board, 2))
     print(MoveMaker.make_move(board, 3))
