@@ -11,8 +11,9 @@ class Evaluator:
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
     # Simply sums the piece weights of the player's and the opponent's pieces
-    def evaluate(color: chess.Color, board: chess.Board) -> int:
+    def evaluate(board: chess.Board) -> int:
         eval = 0
+        color = board.turn
         for i in range(1, 6):
             eval += len(board.pieces(i, color)) * Evaluator.evals[i - 1] # iterate through my pieces
             eval -= len(board.pieces(i, not color)) * Evaluator.evals[i - 1] # iterate through opponent's pieces
@@ -20,7 +21,7 @@ class Evaluator:
     
 def main():
     board = chess.Board()
-    print(Evaluator.evaluate(board.turn, board))
+    print(Evaluator.evaluate(board))
 
 if __name__ == "__main__":
     main()
