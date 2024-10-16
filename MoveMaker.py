@@ -12,11 +12,8 @@ class MoveMaker:
     
     @staticmethod
     def make_move_helper(board: chess.Board, depth: int, my_move: bool=True) -> Tuple[chess.Move, int]:
-        turn = board.turn
         if depth == 0 or board.is_game_over():
-            if turn == chess.BLACK:
-                return None, -1 * Evaluator.univ_evaluate(board)
-            return None, Evaluator.univ_evaluate(board)
+            return None, -1 * Evaluator.univ_evaluate(board)
         
         moves_dict: Dict[chess.Move, int] = {}
 
@@ -27,7 +24,7 @@ class MoveMaker:
 
             moves_dict[move] = curr_eval # records moves and their evaluations
         
-        if (my_move and turn == chess.WHITE) or (not my_move and turn == chess.BLACK):
+        if my_move:
             best_move = max(moves_dict, key=moves_dict.get)
             most_significant_eval = moves_dict[best_move]
         else:
