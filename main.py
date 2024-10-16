@@ -1,35 +1,39 @@
 import chess
-import random
+from MoveMaker import MoveMaker
 
-def playGame(board) -> chess.Outcome:
-    outcome = board.outcome()
+def playGame() -> chess.Outcome:
+    board = chess.Board()
+    outcome = None
 
     while not outcome:
+        print()
         print(board)
-
         # my move
         my_move = input("Enter your move: ")
         board.push_san(my_move)
 
-        outcome = board.outcome() # resetting outcome
-        if outcome:
-            return outcome
-
+        if board.outcome():
+            outcome = board.outcome()
+            break
+        
         # computer's move
-        random_move = random.choice(list(board.legal_moves))
-        board.push(random_move)
+        outcome = playTurn(board)
 
-        outcome = board.outcome() # resetting outcome
     return outcome
+
+def playTurn(board) -> chess.Outcome:
+    move = MoveMaker.make_move(board, 3)
+    board.push(move)
+
+    return board.outcome()
 
 def printOutcome(outcome) -> None:
     outcome = "White" if outcome.winner == chess.WHITE else "Black"
     print(f"Game over. {outcome} wins!")
 
-def main() -> None:
-    board = chess.Board()
 
-    outcome = playGame(board)
+def main() -> None:
+    outcome = playGame()
     printOutcome(outcome)
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ class Evaluator:
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
     # Simply sums the piece weights of the player's and the opponent's pieces
+    @staticmethod
     def evaluate(board: chess.Board) -> int:
         eval = 0
         color = board.turn
@@ -20,6 +21,7 @@ class Evaluator:
         return eval
     
     # doesn't discriminate; positions favoring black are negated
+    @staticmethod
     def univ_evaluate(board: chess.Board) -> int:
         eval = 0
         for i in range(1, 6):
