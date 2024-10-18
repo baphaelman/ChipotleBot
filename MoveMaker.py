@@ -33,6 +33,37 @@ class MoveMaker:
         
         return best_move, most_significant_eval
 
+
+
+    def search(depth: int, board: chess.Board) -> int:
+        # base cases
+        if board.is_game_over():
+            return float('-inf')
+        if depth == 0:
+            return Evaluator.univ_evaluate(board)
+        
+        most_significant_eval = float('-inf')
+        for move in board.legal_moves:
+            board.push(move)
+            most_significant_eval = max(most_significant_eval, -1 * MoveMaker.search(depth - 1, board))
+            board.pop()
+        return most_significant_eval
+    
+    def move_make(board: chess.Board, depth: int):
+        best_move = None
+        best_eval = float('-inf')
+
+        for move in board.legal_moves:
+            board.push(move)
+            eval = -1 * MoveMaker.search(depth - 1, board)
+            if eval > best_eval:
+                best_eval = eval
+                best_move = move
+            board.pop()
+            
+        return best_move
+
+
 def main():
     board = chess.Board()
     board.push_san("d4")
