@@ -1,0 +1,2 @@
+- [ ] Write tests, make sure minimax algorithm is,, actually working
+- [ ] Implement alpha-beta pruning on make_move
