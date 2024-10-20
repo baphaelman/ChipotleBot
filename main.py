@@ -13,8 +13,16 @@ def playGame() -> chess.Outcome:
             print(f"Computer played: {move}")
         
         # my move
-        my_move = input("Enter your move: ")
-        board.push_san(my_move)
+        retry = True
+        while retry:
+            my_move = input("Enter your move: ")
+            try:
+                board.push_san(my_move)
+                retry = False
+                break
+            except:
+                print("Invalid move. Try again.")
+                continue
 
         if board.outcome():
             outcome = board.outcome()
@@ -40,6 +48,18 @@ def printOutcome(outcome) -> None:
 def main() -> None:
     outcome = playGame()
     printOutcome(outcome)
+
+def checkmate_test() -> None:
+    board = chess.Board()
+    board.push_san("e4")
+    board.push_san("e5")
+    board.push_san("Qh5")
+    board.push_san("Nc6")
+    board.push_san("Bc4")
+    board.push_san("Nf6")
+    board.push_san("Qxf7")
+    print(board)
+    print(board.outcome())
 
 if __name__ == "__main__":
     main()

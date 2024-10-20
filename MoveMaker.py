@@ -10,6 +10,8 @@ class MoveMaker:
         best_eval = float('-inf')
 
         for move in board.legal_moves:
+            if not best_move:
+                best_move = move
             board.push(move)
             eval = -1 * MoveMaker.search(depth - 1, board)
             if eval > best_eval:
