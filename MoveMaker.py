@@ -3,9 +3,17 @@ from Evaluator import Evaluator
 
 # determines which move should be made
 class MoveMaker:
+    # depth_function int -> int: given the number of pieces on the board, determines at what depth the minimax algorithm should search
+    # make_move chess.BitBoard -> chess.Move: given a board, returns the best move to make, kickstarts search
+    # search int, chess.Board -> int: recursive function that implements the minimax algorithm
+
+    def depth_function(num_pieces: int) -> int:
+        return int((-0.1 * num_pieces) + 6.2)
 
     # implements minimax recursive algorithm
-    def make_move(board: chess.Board, depth: int):
+    def make_move(board: chess.Board) -> chess.Move:
+        num_pieces = len(board.piece_map())
+        depth = MoveMaker.depth_function(num_pieces)
         best_move = None
         best_eval = float('-inf')
 

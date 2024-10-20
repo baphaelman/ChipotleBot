@@ -2,8 +2,7 @@ import chess
 from MoveMaker import MoveMaker
 from typing import Tuple
 
-def playGame() -> chess.Outcome:
-    board = chess.Board()
+def playGame(board: chess.Board) -> chess.Outcome:
     outcome = None
     move = None
 
@@ -37,7 +36,7 @@ def playGame() -> chess.Outcome:
     return outcome
 
 def playTurn(board) -> Tuple[chess.Move, chess.Outcome]:
-    move = MoveMaker.make_move(board, 3)
+    move = MoveMaker.make_move(board)
     board.push(move)
 
     return move, board.outcome()
@@ -55,8 +54,15 @@ def printOutcome(outcome) -> None:
 
 
 def main() -> None:
-    outcome = playGame()
+    board = chess.Board()
+    outcome = playGame(board)
+    printOutcome(outcome)
+
+def late_game_test() -> None:
+    board = chess.Board('8/2k2r2/8/8/3Q4/2K5/8/8 w - - 0 1')
+    outcome = playGame(board)
     printOutcome(outcome)
 
 if __name__ == "__main__":
     main()
+    # late_game_test()

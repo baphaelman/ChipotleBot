@@ -11,6 +11,7 @@ class Evaluator:
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
     pawnPushWeight = 10
+    pawnCenterWeight = 10
 
     # Simply sums the piece weights of the player's and the opponent's pieces
     @staticmethod
@@ -23,24 +24,9 @@ class Evaluator:
             eval -= len(board.pieces(i, not color)) * Evaluator.evals[i - 1] # iterate through opponent's pieces
         
         # add pawn positional value
-        my_pawn_pieces = board.pieces(chess.PAWN, color)
-        other_pawn_pieces = board.pieces(chess.PAWN, not color)
-        for pawn in my_pawn_pieces:
-            pawn_rank = chess.square_rank(pawn)
-            if color == chess.WHITE:
-                value = (pawn_rank - 1) * Evaluator.pawnPushWeight
-            else:
-                value = (6 - pawn_rank) * Evaluator.pawnPushWeight
-            eval += value
-        
-        for pawn in other_pawn_pieces:
-            pawn_rank = chess.square_rank(pawn)
-            if color == chess.WHITE:
-                value = (6 - pawn_rank) * Evaluator.pawnPushWeight
-            else:
-                value = (pawn_rank - 2) * Evaluator.pawnPushWeight
-            eval -= value
+        eval += Evaluator.pawn_evaluation(board)
         return eval
+
     
     # doesn't discriminate; positions favoring black are negated
     @staticmethod
@@ -50,6 +36,33 @@ class Evaluator:
             eval += len(board.pieces(i, chess.WHITE)) * Evaluator.evals[i - 1] # iterate through white pieces
             eval -= len(board.pieces(i, chess.BLACK)) * Evaluator.evals[i - 1] # iterate through black pieces
         return eval
+    
+    def pawn_evaluation(board: chess.Board) -> int:
+        color = board.turn
+        return_value = 0
+
+        my_pawn_pieces = board.pieces(chess.PAWN, color)
+        other_pawn_pieces = board.pieces(chess.PAWN, not color)
+        for pawn in my_pawn_pieces:
+            pawn_rank = chess.square_rank(pawn)
+            pawn_file = chess.square_file(pawn)
+            if color == chess.WHITE:
+                return_value += (pawn_rank - 1) * Evaluator.pawnPushWeight
+                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeight
+            else:
+                return_value += (6 - pawn_rank) * Evaluator.pawnPushWeight
+                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeight
+        
+        for pawn in other_pawn_pieces:
+            pawn_rank = chess.square_rank(pawn)
+            pawn_file = chess.square_file(pawn)
+            if color == chess.WHITE:
+                return_value -= (6 - pawn_rank) * Evaluator.pawnPushWeight
+                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeight
+            else:
+                return_value -= (pawn_rank - 2) * Evaluator.pawnPushWeight
+                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeigh
+        return return_value
     
 def main():
     board = chess.Board()
