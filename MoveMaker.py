@@ -59,9 +59,15 @@ def test():
     print(MoveMaker.make_move(board, 3))
     print(MoveMaker.make_move(board, 4))
 
-if __name__ == "__main__":
-    print('test:')
-    test()
+def compare_fens():
+    main_board = chess.Board('r1bqkbnr/pppp1ppp/n7/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1')
+    print(f"main eval: {Evaluator.evaluate(main_board)}")
+    test_board = chess.Board('rnbqkbnr/ppp1pppp/8/3p4/4P3/P7/1PPP1PPP/RNBQKBNR w KQkq - 0 1')
+    print(f"text eval: {Evaluator.evaluate(test_board)}")
 
-    print('main:')
+if __name__ == "__main__":
+    print("main test:")
     main()
+    print()
+    print("test test:")
+    test()

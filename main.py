@@ -16,6 +16,8 @@ def playGame() -> chess.Outcome:
         retry = True
         while retry:
             my_move = input("Enter your move: ")
+            if my_move == "stop":
+                return outcome
             try:
                 board.push_san(my_move)
                 retry = False
@@ -41,25 +43,20 @@ def playTurn(board) -> Tuple[chess.Move, chess.Outcome]:
     return move, board.outcome()
 
 def printOutcome(outcome) -> None:
-    outcome = "White" if outcome.winner == chess.WHITE else "Black"
-    print(f"Game over. {outcome} wins!")
+    if outcome:
+        if outcome.winner == chess.WHITE:
+            print("White wins!")
+        elif outcome.winner == chess.BLACK:
+            print("Black wins!")
+        else:
+            print("Draw!")
+    else:
+        print("Game ended prematurely.")
 
 
 def main() -> None:
     outcome = playGame()
     printOutcome(outcome)
-
-def checkmate_test() -> None:
-    board = chess.Board()
-    board.push_san("e4")
-    board.push_san("e5")
-    board.push_san("Qh5")
-    board.push_san("Nc6")
-    board.push_san("Bc4")
-    board.push_san("Nf6")
-    board.push_san("Qxf7")
-    print(board)
-    print(board.outcome())
 
 if __name__ == "__main__":
     main()
