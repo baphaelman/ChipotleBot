@@ -14,6 +14,7 @@ class MoveMaker:
     def make_move(board: chess.Board) -> chess.Move:
         num_pieces = len(board.piece_map())
         depth = MoveMaker.depth_function(num_pieces)
+        print(f'depth: {depth}')
         best_move = None
         best_eval = float('-inf')
 

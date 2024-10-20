@@ -11,7 +11,7 @@ class Evaluator:
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
     pawnPushWeight = 10
-    pawnCenterWeight = 10
+    pawnCenterWeight = 50
 
     # Simply sums the piece weights of the player's and the opponent's pieces
     @staticmethod
@@ -46,22 +46,20 @@ class Evaluator:
         for pawn in my_pawn_pieces:
             pawn_rank = chess.square_rank(pawn)
             pawn_file = chess.square_file(pawn)
+            return_value += min(abs(pawn_file - 0), abs(pawn_file - 7)) * Evaluator.pawnCenterWeight
             if color == chess.WHITE:
-                return_value += (pawn_rank - 1) * Evaluator.pawnPushWeight
-                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeight
+                return_value += (pawn_rank - 1) * Evaluator.pawnPushWeight 
             else:
                 return_value += (6 - pawn_rank) * Evaluator.pawnPushWeight
-                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeight
         
         for pawn in other_pawn_pieces:
             pawn_rank = chess.square_rank(pawn)
             pawn_file = chess.square_file(pawn)
+            return_value -= min(abs(pawn_file - 0), abs(pawn_file - 7)) * Evaluator.pawnCenterWeight
             if color == chess.WHITE:
                 return_value -= (6 - pawn_rank) * Evaluator.pawnPushWeight
-                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeight
             else:
-                return_value -= (pawn_rank - 2) * Evaluator.pawnPushWeight
-                return_value += max(abs(pawn_file - 3), abs(pawn_file - 4)) * Evaluator.pawnCenterWeigh
+                return_value -= (pawn_rank - 1) * Evaluator.pawnPushWeight
         return return_value
     
 def main():
