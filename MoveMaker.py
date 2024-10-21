@@ -8,13 +8,14 @@ class MoveMaker:
     # search(int, chess.Board) -> int: recursive function that implements the minimax algorithm
 
     def depth_function(num_pieces: int) -> int:
-        return int((-0.1 * num_pieces) + 6.2)
+        # return int((-0.1 * num_pieces) + 6.2)
+        return 3
 
     # implements minimax recursive algorithm
     def make_move(board: chess.Board) -> chess.Move:
         num_pieces = len(board.piece_map())
         depth = MoveMaker.depth_function(num_pieces)
-        print(f'depth: {depth}')
+        print(f"depth: {depth}")
         best_move = None
         best_eval = float('-inf')
 
@@ -24,6 +25,7 @@ class MoveMaker:
             board.push(move)
             eval = -1 * MoveMaker.search(depth - 1, board)
             print(move, eval)
+
             if eval > best_eval:
                 best_eval = eval
                 best_move = move
@@ -42,7 +44,9 @@ class MoveMaker:
         most_significant_eval = float('-inf')
         for move in board.legal_moves:
             board.push(move)
-            most_significant_eval = max(most_significant_eval, -1 * MoveMaker.search(depth - 1, board))
+            eval = -1 * MoveMaker.search(depth - 1, board)
+
+            most_significant_eval = max(most_significant_eval, eval)
             board.pop()
         return most_significant_eval
     
@@ -68,20 +72,14 @@ def main():
 
     board.push_san("Nf3")
     board.push_san("Na6")
-    print(MoveMaker.make_move(board, 1))
-    print(MoveMaker.make_move(board, 3))
-    print(MoveMaker.make_move(board, 2))
-    print(MoveMaker.make_move(board, 4))
+    print(MoveMaker.make_move(board))
 
 def test():
     board = chess.Board()
     board.push_san("e4")
     board.push_san("d5")
     board.push_san("a3")
-    print(MoveMaker.make_move(board, 1))
-    print(MoveMaker.make_move(board, 2))
-    print(MoveMaker.make_move(board, 3))
-    print(MoveMaker.make_move(board, 4))
+    print(MoveMaker.make_move(board))
 
 def compare_fens():
     main_board = chess.Board('r1bqkbnr/pppp1ppp/n7/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1')
@@ -89,9 +87,15 @@ def compare_fens():
     test_board = chess.Board('rnbqkbnr/ppp1pppp/8/3p4/4P3/P7/1PPP1PPP/RNBQKBNR w KQkq - 0 1')
     print(f"text eval: {Evaluator.evaluate(test_board)}")
 
+def endgame_test():
+    board = chess.Board('8/2k2r2/8/8/3Q4/2K5/8/8 w - - 0 1')
+    board2 = chess.Board('8/8/8/1Q6/8/2K5/8/k7 w - - 0 1')
+    board3 = chess.Board('1Q6/8/8/8/8/2K5/k7/8 w - - 0 1')
+    
+    # print("MOVE 1 IS: ", MoveMaker.make_move(board))
+    print("MOVE 2 IS: ", MoveMaker.make_move(board2))
+    print("MOVE 3 IS: ", MoveMaker.make_move(board3))
+
+
 if __name__ == "__main__":
-    print("main test:")
-    main()
-    print()
-    print("test test:")
-    test()
+    endgame_test()
