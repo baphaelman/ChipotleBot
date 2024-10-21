@@ -3,9 +3,9 @@ from Evaluator import Evaluator
 
 # determines which move should be made
 class MoveMaker:
-    # depth_function int -> int: given the number of pieces on the board, determines at what depth the minimax algorithm should search
-    # make_move chess.BitBoard -> chess.Move: given a board, returns the best move to make, kickstarts search
-    # search int, chess.Board -> int: recursive function that implements the minimax algorithm
+    # depth_function(int) -> int: given the number of pieces on the board, determines at what depth the minimax algorithm should search
+    # make_move(chess.BitBoard) -> chess.Move: given a board, returns the best move to make, kickstarts search
+    # search(int, chess.Board) -> int: recursive function that implements the minimax algorithm
 
     def depth_function(num_pieces: int) -> int:
         return int((-0.1 * num_pieces) + 6.2)
@@ -23,6 +23,7 @@ class MoveMaker:
                 best_move = move
             board.push(move)
             eval = -1 * MoveMaker.search(depth - 1, board)
+            print(move, eval)
             if eval > best_eval:
                 best_eval = eval
                 best_move = move
@@ -44,6 +45,20 @@ class MoveMaker:
             most_significant_eval = max(most_significant_eval, -1 * MoveMaker.search(depth - 1, board))
             board.pop()
         return most_significant_eval
+    
+    def alpha_make_move(board: chess.Board) -> chess.Move:
+        pass
+
+    def alpha_search(depth: int, board: chess.Board, alpha: int, beta: int) -> int:
+        # base cases
+        if board.is_game_over():
+            return float('-inf')
+        if depth == 0:
+            return Evaluator.evaluate(board)
+        
+        most_significant_eval = float('-inf')
+        pass
+
 
 
 def main():

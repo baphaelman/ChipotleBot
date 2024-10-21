@@ -7,7 +7,7 @@ def playGame(board: chess.Board) -> chess.Outcome:
     move = None
 
     while not outcome:
-        print(board)
+        print(board.unicode())
         if move:
             print(f"Computer played: {move}")
         

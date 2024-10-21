@@ -2,6 +2,10 @@ import chess
 
 # Evaluates the position of the baord
 class Evaluator:
+    # METHODS
+    # evaluate(chess.Board) -> int: evalutaes a given position
+    # pawn_evaluation(chess.Board) -> int: hat amount to add to evaluation, considering pawnpush and pawncenter weights
+    
     pawnWeight = 100
     knightWeight = 300
     bishopWeight = 300
@@ -11,7 +15,7 @@ class Evaluator:
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
     pawnPushWeight = 10
-    pawnCenterWeight = 50
+    pawnCenterWeight = 5
 
     # Simply sums the piece weights of the player's and the opponent's pieces
     @staticmethod
@@ -25,16 +29,6 @@ class Evaluator:
         
         # add pawn positional value
         eval += Evaluator.pawn_evaluation(board)
-        return eval
-
-    
-    # doesn't discriminate; positions favoring black are negated
-    @staticmethod
-    def univ_evaluate(board: chess.Board) -> int:
-        eval = 0
-        for i in range(1, 6):
-            eval += len(board.pieces(i, chess.WHITE)) * Evaluator.evals[i - 1] # iterate through white pieces
-            eval -= len(board.pieces(i, chess.BLACK)) * Evaluator.evals[i - 1] # iterate through black pieces
         return eval
     
     def pawn_evaluation(board: chess.Board) -> int:
