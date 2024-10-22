@@ -15,13 +15,13 @@ class MoveMaker:
     def make_move(board: chess.Board) -> chess.Move:
         num_pieces = len(board.piece_map())
         depth = MoveMaker.depth_function(num_pieces)
-        print(f"depth: {depth}")
         best_move = None
         best_eval = float('-inf')
 
         for move in board.legal_moves:
             if not best_move:
                 best_move = move
+            
             board.push(move)
             eval = -1 * MoveMaker.search(depth - 1, board)
             print(move, eval)
