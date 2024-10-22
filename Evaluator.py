@@ -14,15 +14,15 @@ class Evaluator:
 
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
-    white_pawn_position_weights = [0, 0, 0, 0, 0, 0, 0, 0,
-                             0, 0, 0, 0, 0, 0, 0, 0,
-                             5, 5, 10, 10, 10, 10, 5, 5,
-                             15, 15, 20, 20, 20, 20, 15, 15,
-                             20, 20, 30, 30, 30, 30, 20, 20,
-                             30, 30, 40, 40, 40, 40, 30, 30,
-                             40, 40, 50, 50, 50, 50, 40, 40,
-                             0, 0, 0, 0, 0, 0, 0, 0]
-    black_pawn_position_weights = list(reversed(white_pawn_position_weights))
+    black_pawn_position_weights = [0,  0,  0,  0,  0,  0,  0,  0,
+                                50, 50, 50, 50, 50, 50, 50, 50,
+                                10, 10, 20, 30, 30, 20, 10, 10,
+                                5,  5, 10, 25, 25, 10,  5,  5,
+                                0,  0,  0, 20, 20,  0,  0,  0,
+                                5, -5,-10,  0,  0,-10, -5,  5,
+                                5, 10, 10,-20,-20, 10, 10,  5,
+                                0,  0,  0,  0,  0,  0,  0,  0]
+    white_pawn_position_weights = list(reversed(black_pawn_position_weights))
 
     # Simply sums the piece weights of the player's and the opponent's pieces
     @staticmethod
