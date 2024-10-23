@@ -10,7 +10,7 @@ class MoveMaker:
     num_searched = 0
 
     def depth_function(num_pieces: int) -> int:
-        return int((-0.1 * num_pieces) + 7.2)
+        return int((-0.07 * num_pieces) + 6.2)
     
     def make_move(board: chess.Board) -> chess.Move:
         num_pieces = len(board.piece_map())
@@ -102,13 +102,15 @@ def compare_fens():
     print(f"text eval: {Evaluator.evaluate(test_board)}")
 
 def endgame_test():
-    board = chess.Board('8/2k2r2/8/8/3Q4/2K5/8/8 w - - 0 1')
+    board = chess.Board('6Q1/p1p3P1/1k1p2N1/p1n1p2P/5r2/1b6/2n4K/b1q2b2 b - - 29 30')
     board2 = chess.Board('8/8/8/1Q6/8/2K5/8/k7 w - - 0 1')
     board3 = chess.Board('1Q6/8/8/8/8/2K5/k7/8 w - - 0 1')
+    board4 = chess.Board('6QR/8/3p1kN1/1P5P/3N1r2/1b4P1/3r4/2K2b2 b - - 13 10')
     
-    # print("MOVE 1 IS: ", MoveMaker.make_move(board))
+    print("MOVE 1 IS: ", MoveMaker.make_move(board))
     print("MOVE 2 IS: ", MoveMaker.make_move(board2))
     print("MOVE 3 IS: ", MoveMaker.make_move(board3))
+    print("MOVE 4 IS: ", MoveMaker.make_move(board4))
 
 
 if __name__ == "__main__":
