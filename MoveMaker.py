@@ -24,13 +24,12 @@ class MoveMaker:
             
             board.push(move)
             eval = -1 * MoveMaker.search(depth - 1, board)
-            print(move, eval)
 
             if eval > best_eval:
                 best_eval = eval
                 best_move = move
             board.pop()
-
+        print(f'best eval {best_eval}')
         return best_move
     
     def search(depth: int, board: chess.Board) -> int:

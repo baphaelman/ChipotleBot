@@ -1,4 +1,5 @@
 import chess
+from piece_weights import *
 
 # Evaluates the position of the baord
 class Evaluator:
@@ -14,39 +15,41 @@ class Evaluator:
 
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
-    black_pawn_position_weights = [0,  0,  0,  0,  0,  0,  0,  0,
-                                50, 50, 50, 50, 50, 50, 50, 50,
-                                10, 10, 20, 30, 30, 20, 10, 10,
-                                5,  5, 10, 25, 25, 10,  5,  5,
-                                0,  0,  0, 20, 20,  0,  0,  0,
-                                5, -5,-10,  0,  0,-10, -5,  5,
-                                5, 10, 10,-20,-20, 10, 10,  5,
-                                0,  0,  0,  0,  0,  0,  0,  0]
-    white_pawn_position_weights = list(reversed(black_pawn_position_weights))
-
     # Simply sums the piece weights of the player's and the opponent's pieces
     @staticmethod
     def evaluate(board: chess.Board) -> int:
         eval = 0
         color = board.turn
 
+        if color == chess.WHITE:
+            my_weights = white_weights
+            other_weights = black_weights
+        else:
+            my_weights = black_weights
+            other_weights = white_weights
+
         for i in range(1, 6):
-            eval += len(board.pieces(i, color)) * Evaluator.evals[i - 1] # iterate through my pieces
-            eval -= len(board.pieces(i, not color)) * Evaluator.evals[i - 1] # iterate through opponent's pieces
-        
-        # add pawn positional value
-        eval += Evaluator.pawn_evaluation(board)
+            curr_pieces = board.pieces(i, color)
+            other_curr_pieces = board.pieces(i, not color)
+            eval += len(curr_pieces) * Evaluator.evals[i - 1] # iterate through my pieces
+            eval -= len(other_curr_pieces) * Evaluator.evals[i - 1] # iterate through opponent's pieces
+
+            # consider positional value
+            for piece in curr_pieces:
+                eval += my_weights[i][piece]
+            for other_piece in other_curr_pieces:
+                eval -= other_weights[i][other_piece]
         return eval
     
     def pawn_evaluation(board: chess.Board) -> int:
         color = board.turn
         return_value = 0
         if color == chess.WHITE:
-            pawn_board = Evaluator.white_pawn_position_weights
-            other_pawn_board = Evaluator.black_pawn_position_weights
+            pawn_board = white_pawn_weights
+            other_pawn_board = black_pawn_weights
         else:
-            pawn_board = Evaluator.black_pawn_position_weights
-            other_pawn_board = Evaluator.white_pawn_position_weights
+            pawn_board = black_pawn_weights
+            other_pawn_board = white_pawn_weights
 
         my_pawn_pieces = board.pieces(chess.PAWN, color)
         other_pawn_pieces = board.pieces(chess.PAWN, not color)
