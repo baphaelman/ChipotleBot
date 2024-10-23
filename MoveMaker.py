@@ -10,53 +10,9 @@ class MoveMaker:
     num_searched = 0
 
     def depth_function(num_pieces: int) -> int:
-        # return int((-0.1 * num_pieces) + 6.2)
-        return 3
-
-    # implements minimax recursive algorithm
+        return int((-0.1 * num_pieces) + 7.2)
+    
     def make_move(board: chess.Board) -> chess.Move:
-        num_pieces = len(board.piece_map())
-        depth = MoveMaker.depth_function(num_pieces)
-
-        best_move = None
-        best_eval = float('-inf')
-
-        for move in board.legal_moves:
-            if not best_move:
-                best_move = move
-            
-            board.push(move)
-            eval = -1 * MoveMaker.search(depth - 1, board)
-
-            if eval > best_eval:
-                best_eval = eval
-                best_move = move
-            board.pop()
-        print(f'best move: {best_move}')
-        print(f'number searched: {MoveMaker.num_searched}')
-        MoveMaker.num_searched = 0
-        return best_move
-    
-    def search(depth: int, board: chess.Board) -> int:
-        # base cases
-        if board.is_game_over():
-            MoveMaker.num_searched += 1
-            return float('-inf')
-        if depth == 0:
-            MoveMaker.num_searched += 1
-            return Evaluator.evaluate(board)
-        
-
-        most_significant_eval = float('-inf')
-        for move in board.legal_moves:
-            board.push(move)
-            eval = -1 * MoveMaker.search(depth - 1, board)
-
-            most_significant_eval = max(most_significant_eval, eval)
-            board.pop()
-        return most_significant_eval
-    
-    def alpha_make_move(board: chess.Board) -> chess.Move:
         num_pieces = len(board.piece_map())
         depth = MoveMaker.depth_function(num_pieces)
         color = board.turn
@@ -72,7 +28,7 @@ class MoveMaker:
                 best_move = move
             
             board.push(move)
-            eval = -1 * MoveMaker.alpha_search(depth - 1, board, alpha, beta)
+            eval = -1 * MoveMaker.search(depth - 1, board, alpha, beta)
             if eval > best_eval:
                 best_eval = eval
                 best_move = move
@@ -87,11 +43,12 @@ class MoveMaker:
                 if -1 * alpha <= beta:
                     break
         
+        print(f'depth searched: {depth}')
         print(f'alpha number searched: {MoveMaker.num_searched}')
         MoveMaker.num_searched = 0
         return best_move
 
-    def alpha_search(depth: int, board: chess.Board, alpha: int, beta: int) -> int:
+    def search(depth: int, board: chess.Board, alpha: int, beta: int) -> int:
         # base cases
         if board.is_game_over():
             MoveMaker.num_searched += 1
@@ -105,7 +62,7 @@ class MoveMaker:
         most_significant_eval = float('-inf')
         for move in board.legal_moves:
             board.push(move)
-            eval = -1 * MoveMaker.alpha_search(depth - 1, board, alpha, beta)
+            eval = -1 * MoveMaker.search(depth - 1, board, alpha, beta)
             most_significant_eval = max(most_significant_eval, eval)
             board.pop()
 
