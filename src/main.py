@@ -7,10 +7,16 @@ def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
     outcome = None
     move = None
 
+    if computer_color == chess.WHITE:
+        print(board.unicode())
+        print()
+        move, outcome = playTurn(board)
+
     while not outcome:
         print(board.unicode())
         if move:
             print(f"Computer played: {move}")
+
         
         # my move
         retry = True
@@ -62,11 +68,5 @@ def main() -> None:
     outcome = playGame(board, chess.WHITE)
     printOutcome(outcome)
 
-def late_game_test() -> None:
-    board = chess.Board('8/2k2r2/8/8/3Q4/2K5/8/8 w - - 0 1')
-    outcome = playGame(board)
-    printOutcome(outcome)
-
 if __name__ == "__main__":
     main()
-    # late_game_test()
