@@ -7,6 +7,8 @@ class MoveMaker:
     # make_move(chess.BitBoard) -> chess.Move: given a board, returns the best move to make, kickstarts search
     # search(int, chess.Board) -> int: recursive function that implements the minimax algorithm
 
+    num_searched = 0
+
     def depth_function(num_pieces: int) -> int:
         # return int((-0.1 * num_pieces) + 6.2)
         return 3
@@ -15,6 +17,7 @@ class MoveMaker:
     def make_move(board: chess.Board) -> chess.Move:
         num_pieces = len(board.piece_map())
         depth = MoveMaker.depth_function(num_pieces)
+
         best_move = None
         best_eval = float('-inf')
 
@@ -29,14 +32,18 @@ class MoveMaker:
                 best_eval = eval
                 best_move = move
             board.pop()
-        print(f'best eval {best_eval}')
+        print(f'best move: {best_move}')
+        print(f'number searched: {MoveMaker.num_searched}')
+        MoveMaker.num_searched = 0
         return best_move
     
     def search(depth: int, board: chess.Board) -> int:
         # base cases
         if board.is_game_over():
+            MoveMaker.num_searched += 1
             return float('-inf')
         if depth == 0:
+            MoveMaker.num_searched += 1
             return Evaluator.evaluate(board)
         
 
@@ -50,17 +57,68 @@ class MoveMaker:
         return most_significant_eval
     
     def alpha_make_move(board: chess.Board) -> chess.Move:
-        pass
+        num_pieces = len(board.piece_map())
+        depth = MoveMaker.depth_function(num_pieces)
+        color = board.turn
+
+        alpha = float('-inf')
+        beta  = float('-inf')
+        
+        best_move = None
+        best_eval = float('-inf')
+
+        for move in board.legal_moves:
+            if not best_move:
+                best_move = move
+            
+            board.push(move)
+            eval = -1 * MoveMaker.alpha_search(depth - 1, board, alpha, beta)
+            if eval > best_eval:
+                best_eval = eval
+                best_move = move
+            board.pop()
+
+            if color == chess.WHITE:
+                alpha = max(alpha, eval)
+                if -1 * beta <= alpha:
+                    break
+            else:
+                beta = max(beta, eval)
+                if -1 * alpha <= beta:
+                    break
+        
+        print(f'alpha number searched: {MoveMaker.num_searched}')
+        MoveMaker.num_searched = 0
+        return best_move
 
     def alpha_search(depth: int, board: chess.Board, alpha: int, beta: int) -> int:
         # base cases
         if board.is_game_over():
+            MoveMaker.num_searched += 1
             return float('-inf')
         if depth == 0:
+            MoveMaker.num_searched += 1
             return Evaluator.evaluate(board)
         
+        color = board.turn
+        
         most_significant_eval = float('-inf')
-        pass
+        for move in board.legal_moves:
+            board.push(move)
+            eval = -1 * MoveMaker.alpha_search(depth - 1, board, alpha, beta)
+            most_significant_eval = max(most_significant_eval, eval)
+            board.pop()
+
+            # overly complicated alpha beta pruning because evaluate is color-dependent
+            if color == chess.WHITE:
+                alpha = max(alpha, eval)
+                if -1 * beta <= alpha:
+                    break
+            else:
+                beta = max(beta, eval)
+                if -1 * alpha <= beta:
+                    break
+        return most_significant_eval
 
 
 

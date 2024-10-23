@@ -2,7 +2,8 @@ import chess
 from MoveMaker import MoveMaker
 from typing import Tuple
 
-def playGame(board: chess.Board) -> chess.Outcome:
+def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
+    computer_color = not player_color
     outcome = None
     move = None
 
@@ -28,17 +29,20 @@ def playGame(board: chess.Board) -> chess.Outcome:
         if board.outcome():
             outcome = board.outcome()
             break
-        
+
         print()
+        
         # computer's move
         move, outcome = playTurn(board)
-
+    
+    if outcome.winner == computer_color: # show final board if computer wins on their move
+        print(board.unicode())
+    
     return outcome
 
 def playTurn(board) -> Tuple[chess.Move, chess.Outcome]:
     move = MoveMaker.make_move(board)
     board.push(move)
-
     return move, board.outcome()
 
 def printOutcome(outcome) -> None:
@@ -55,7 +59,7 @@ def printOutcome(outcome) -> None:
 
 def main() -> None:
     board = chess.Board()
-    outcome = playGame(board)
+    outcome = playGame(board, chess.WHITE)
     printOutcome(outcome)
 
 def late_game_test() -> None:
