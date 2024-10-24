@@ -13,13 +13,16 @@ class MoveMaker:
         return int((-0.06 * num_pieces) + 5.95)
     
     def depth_function_moves(num_moves: int) -> int:
-        return int((0.005 * num_moves ** 2) - (0.3 * num_moves) + 8.5)
+        return int(round(((0.0013 * num_moves ** 2) - (0.104 * num_moves) + 5.88)))
     
     def make_move(board: chess.Board) -> chess.Move:
         # num_pieces = len(board.piece_map())
         # depth = MoveMaker.depth_function(num_pieces)
         num_moves = len(list(board.legal_moves))
         depth = MoveMaker.depth_function_moves(num_moves)
+        print(f'num moves: {num_moves}')
+        print(f'depth searched: {depth}')
+
         color = board.turn
 
         alpha = float('-inf')
@@ -48,8 +51,6 @@ class MoveMaker:
                 if -1 * alpha <= beta:
                     break
         
-        print(f'num moves: {num_moves}')
-        print(f'depth searched: {depth}')
         print(f'alpha number searched: {MoveMaker.num_searched}')
         MoveMaker.num_searched = 0
         return best_move
@@ -82,21 +83,3 @@ class MoveMaker:
                 if -1 * alpha <= beta:
                     break
         return most_significant_eval
-
-
-
-def main():
-    board = chess.Board()
-    board.push_san("e4")
-    board.push_san("e5")
-
-    board.push_san("Nf3")
-    board.push_san("Na6")
-    print(MoveMaker.make_move(board))
-
-def test():
-    board = chess.Board()
-    board.push_san("e4")
-    board.push_san("d5")
-    board.push_san("a3")
-    print(MoveMaker.make_move(board))

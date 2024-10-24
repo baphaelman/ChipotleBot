@@ -24,6 +24,11 @@ def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
             my_move = input("Enter your move: ")
             if my_move == "stop":
                 return outcome
+            elif my_move == "undo":
+                board.pop()
+                board.pop()
+                print(board.unicode())
+                continue
             try:
                 board.push_san(my_move)
                 retry = False

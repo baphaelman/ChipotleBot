@@ -17,6 +17,24 @@ class MoveMakerTest:
         print("MOVE 2 IS: ", MoveMaker.make_move(board2))
         print("MOVE 3 IS: ", MoveMaker.make_move(board3))
         print("MOVE 4 IS: ", MoveMaker.make_move(board4))
+    
+    def main():
+        board = chess.Board()
+        board.push_san("e4")
+        board.push_san("e5")
+
+        board.push_san("Nf3")
+        board.push_san("Na6")
+        print(MoveMaker.make_move(board))
+
+    def test(): 
+        board = chess.Board()
+        board.push_san("e4")
+        board.push_san("d5")
+        board.push_san("a3")
+        print(MoveMaker.make_move(board))
 
 if __name__ == "__main__":
     MoveMakerTest.endgame_test()
+    # MoveMakerTest.main()
+    # MoveMakerTest.test()
