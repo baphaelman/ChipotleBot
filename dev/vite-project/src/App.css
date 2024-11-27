@@ -19,6 +19,12 @@ body {
   text-decoration: bold;
 }
 
+.start-game {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 500px;
+}
+
 .board {
   display: flex;
   justify-content: center;
