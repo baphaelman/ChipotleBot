@@ -1,15 +1,30 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: grey;
+  background-color: black;
+  background-color: #A81612;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
 .text {
   width: 100vw;
   text-align: center;
+  color: #451400;
+  text-decoration: bold;
 }
 
 .board {
   display: flex;
   justify-content: center;
+}
+
+input {
+  width: 50%;
 }

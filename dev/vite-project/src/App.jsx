@@ -4,7 +4,7 @@ import ChessBoard from './components/ChessBoard'
 function App() {
 
   return (
-    <div>
+    <div className="app">
       <div className="text">
         <h1>ChipotleBot</h1>
         <h2>pay up,, sucker</h2>
@@ -12,6 +12,7 @@ function App() {
       <div className="board">
         <ChessBoard />
       </div>
+      <input></input>
     </div>
   )
 }
