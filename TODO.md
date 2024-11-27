@@ -1,5 +1,6 @@
 # General
-- [ ] learn an actual python testing library and make real tests lol
+- [x] learn an actual python testing library and make real tests lol
+- [ ] make this the backend for a react page where you can drag and drop the pieces
 
 # MoveMaker
 - [x] Write tests, make sure minimax algorithm is,, actually working
@@ -12,5 +13,5 @@
 - [x] change depth as number of pieces on the board decreases
 - [x] implement pawn evaluation to help early game
 - [x] implement piece tables to help all game
-- [ ] Lookup table for already evaluated positions
+- [ ] Lookup table for already evaluated positions (will need to instantiate Evaluator loll)
 - [ ] guess move ordering before searching them to get the most out of alpha-beta pruning

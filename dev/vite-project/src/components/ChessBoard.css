@@ -1,0 +1,7 @@
+.square-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 500px; /* Adjust the size as needed */
+    height: 500px; /* Adjust the size as needed */
+}

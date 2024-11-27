@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: grey;
+}
+
+.text {
+  width: 100vw;
+  text-align: center;
+}
+
+.board {
+  display: flex;
+  justify-content: center;
+}

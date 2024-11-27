@@ -33,7 +33,7 @@ def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
                 board.push_san(my_move)
                 retry = False
                 break
-            except:
+            except (chess.IllegalMoveError, chess.InvalidMoveError):
                 print("Invalid move. Try again.")
                 continue
 

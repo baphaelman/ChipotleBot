@@ -20,7 +20,7 @@ class MoveMaker:
         # depth = MoveMaker.depth_function(num_pieces)
         num_moves = len(list(board.legal_moves))
         depth = MoveMaker.depth_function_moves(num_moves)
-        print(f'num moves: {num_moves}')
+        # print(f'num moves: {num_moves}')
         print(f'depth searched: {depth}')
 
         color = board.turn
@@ -51,7 +51,7 @@ class MoveMaker:
                 if -1 * alpha <= beta:
                     break
         
-        print(f'alpha number searched: {MoveMaker.num_searched}')
+        # print(f'alpha number searched: {MoveMaker.num_searched}')
         MoveMaker.num_searched = 0
         return best_move
 
