@@ -66,9 +66,6 @@ function App() {
         <h1>ChipotleBot</h1>
         <h3>pay up,, sucker</h3>
       </div>
-      <button className="start-game" onClick={() => setGameStarted(true)}>
-        Start Game
-      </button>
       {gameStarted ?
         <div className="game">
           <div className="board">
@@ -80,16 +77,31 @@ function App() {
               placeholder="Type your move and press Enter"
             />
           </div>
-          {/*
-          <div className="stats">
-              <h1>ChipotleBot's Move:</h1>
-              {computerMove
-              ? <p>{computerMove}</p>
-              : null}
+          <div className="moves-grid">
+            <div className="numbers column">
+              <p>.</p>
+              <p className="odd">1.</p>
+              <p>2.</p>
+              <p className="odd">3.</p>
             </div>
-            */}
+            <div className="my-moves column">
+              <p>My Move</p>
+              <p className="odd">e4</p>
+              <p>Qxg7</p>
+              <p className="odd">Rhe3</p>
+            </div>
+            <div className="chipotle-moves column">
+              <p>ChipotleBot's Move</p>
+              <p className="odd">.{computerMove}</p>
+              <p>e5</p>
+              <p className="odd">gxe7</p>
+            </div>
+          </div>
+          
         </div>
-      : null}
+      : <button className="start-game" onClick={() => setGameStarted(true)}>
+          Start Game
+        </button>}
     </div>
   );
 }

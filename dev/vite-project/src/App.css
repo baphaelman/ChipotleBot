@@ -1,6 +1,7 @@
 :root {
   --bg: rgb(47, 47, 47);
   --cream: rgb(255, 250, 244);
+  --off-white: rgb(241 241 241);
   --chipotle-red: rgb( 169 21 18);
   --chipotle-burgundy: rgb(70 20 0);
 }
@@ -51,6 +52,7 @@ body {
 .game {
   display: flex;
   justify-content: center;
+  gap: 32px;
 }
 
 input {
@@ -60,4 +62,24 @@ input {
   padding: 20px 0px;
   text-align: center;
   border-radius: 8px;
+}
+
+.moves-grid {
+  width: 500px;
+  padding: 8px 40px;
+  border-radius: 8px;
+  background-color: var(--off-white);
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  line-height: 20px;
+}
+
+.odd {
+  background-color: white;
 }
