@@ -1,7 +1,14 @@
+:root {
+  --bg: rgb(47, 47, 47);
+  --cream: rgb(255, 250, 244);
+  --chipotle-red: rgb( 169 21 18);
+  --chipotle-burgundy: rgb(70 20 0);
+}
+
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(47, 47, 47);
+  background-color: var(--bg);
 }
 
 .app {
@@ -15,7 +22,7 @@ body {
 .text {
   width: 100vw;
   text-align: center;
-  color: white;
+  color: var(--cream);
   text-decoration: bold;
 }
 
@@ -23,13 +30,34 @@ body {
   padding: 10px 20px;
   border: none;
   border-radius: 500px;
+  color: var(--cream);
+  font-size: 0.9em;
+  background-color: var(--chipotle-red);
+  transition: all ease 0.25s;
+}
+
+.start-game:hover {
+  background-color: var(--chipotle-burgundy);
+  cursor: pointer;
 }
 
 .board {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.game {
+  display: flex;
+  justify-content: center;
 }
 
 input {
-  width: 80px;
+  margin-top: 20px;
+  width: 100%;
+  font-size: 20px;
+  padding: 20px 0px;
+  text-align: center;
+  border-radius: 8px;
 }

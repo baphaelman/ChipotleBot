@@ -8,10 +8,13 @@
 
 .white {
     background-color: #EEEED2;
+    background-color: rgb(255, 246, 235);
+    background-color: #EEEED2;
 }
 
 .black {
     background-color: #769656;
+    background-color: rgb(177, 126, 77);
 }
 
 img {
