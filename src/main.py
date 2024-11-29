@@ -44,17 +44,18 @@ def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
         print()
         
         # computer's move
-        move, outcome = playTurn(board)
+        move, outcome, san = playTurn(board)
     
     if outcome.winner == computer_color: # show final board if computer wins on their move
         print(board.unicode())
     
     return outcome
 
-def playTurn(board) -> Tuple[chess.Move, chess.Outcome]:
+def playTurn(board):
     move = MoveMaker.make_move(board)
+    move_san = board.san(move)
     board.push(move)
-    return move, board.outcome()
+    return move, board.outcome(), move_san
 
 def printOutcome(outcome) -> None:
     if outcome:

@@ -47,16 +47,19 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 20px;
 }
 
 .game {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 32px;
+  height: 570px;
 }
 
 input {
-  margin-top: 20px;
+  height: 20px;
   width: 100%;
   font-size: 20px;
   padding: 20px 0px;
@@ -64,26 +67,67 @@ input {
   border-radius: 8px;
 }
 
+/* moves grid */
+.moves-stats {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.moves-headers {
+  width: 500px;
+  display: grid;
+  grid-template-columns: 72px 0.75fr 1fr;
+  justify-content: space-between;
+  top: 0;
+  margin: 0;
+}
+
 .moves-grid {
   width: 500px;
-  padding: 8px 40px;
+  height: 100%;
   border-radius: 8px;
-  background-color: var(--off-white);
   display: grid;
-  grid-template-columns: 20px 1fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 72px 0.75fr 1fr;
+  overflow-y: auto;
+}
+
+.numbers > p{
+  padding-left: 40px;
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  line-height: 20px;
+  line-height: 16px;
+  font-size: 16px;
+}
+
+.header {
+  font-size: 24px;
+  color: var(--off-white);
+  margin: 0;
+  margin-bottom: 12px;
 }
 
 .odd {
+  padding: 12px 0;
+  background-color: var(--off-white);
+  margin: 0;
+}
+
+.even {
+  padding: 12px 0;
   background-color: white;
+  margin: 0;
+}
+
+.zero-num {
+  font-size: 24px;
+  color: transparent;
 }
 
 .zero {
-  color: transparent;
+  font-size: 24px;
 }

@@ -1,5 +1,5 @@
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import ChessBoard from './components/ChessBoard'
 import axios from 'axios'
 
@@ -9,16 +9,24 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [gameStarted, setGameStarted] = useState(false);
   const [board, setBoard] = useState('8/8/8/8/8/8/8/8');
-  const [numberList, setNumberList] =  useState(['sum']);
-  const [myMoves, setMyMoves] = useState(['My Moves']);
-  const [botMoves, setBotMoves] = useState(["ChipotleBot's Moves"]);
+  const [numberList, setNumberList] =  useState([]);
+  const [myMoves, setMyMoves] = useState([]);
+  const [botMoves, setBotMoves] = useState([]);
   const [moveNumber, setMoveNumber] = useState(1);
 
+  const movesEndRef = useRef(null);
+
+  // start game
   useEffect(() => {
     if (gameStarted) {
         startGame();
     }
 }, [gameStarted]);
+
+  // scroll new moves into frame
+  useEffect(() => {
+    scrollToBottom();
+  }, [myMoves, botMoves]);
 
   const startGame = async () => {
     try {
@@ -43,28 +51,33 @@ function App() {
   const handleSubmit = async () => {
     // player move
     try {
-      const response = await axios.post('/make_player_move', { move: inputValue });
-      setBoard(response.data.board);
-      setMyMoves((prevMoves) => [...prevMoves, response.data.move]);
+      const response_player = await axios.post('/make_player_move', { move: inputValue });
+      setBoard(response_player.data.board);
+      setMyMoves((prevMoves) => [...prevMoves, response_player.data.move]);
       setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);
       setMoveNumber(moveNumber + 1);
       setInputValue('');
 
       // computer move
-    try {
-      const response = await axios.post('/make_computer_move');
-      setBoard(response.data.board);
-      setBotMoves((prevMoves) => [...prevMoves, response.data.move]);
-      setInputValue('');
-    } catch (error) {
-      console.error('Error making move:', error);
-    }
+      try {
+        const response_bot = await axios.post('/make_computer_move');
+        setBoard(response_bot.data.board);
+        setBotMoves((prevMoves) => [...prevMoves, response_bot.data.move_san]);
+        console.log(botMoves);
+        setInputValue('');
+      } catch (error) {
+        console.error('Error making move:', error);
+      }
 
     } catch (error) {
       console.error('Error making move:', error);
       alert('Invalid move');
     }
   }
+
+  const scrollToBottom = () => {
+    movesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="app">
@@ -83,30 +96,37 @@ function App() {
               placeholder="Type your move and press Enter"
             />
           </div>
-          <div className="moves-grid">
-            <div className="numbers column">
-              {numberList.map((item, index) => (
-              <p key={index} className={index === 0 ? 'zero' : index % 2 === 0 ? 'even' : 'odd'}>
-                {item}
-              </p>
-            ))}
+          <div className="moves-stats">
+            <div className="moves-headers">
+              <p className="header" style={{paddingLeft: '40px'}}>#</p>
+              <p className="header">My Moves</p>
+              <p className="header">ChipotleBot's Moves</p>
             </div>
-            <div className="my-moves column">
-              {myMoves.map((item, index) => (
+            <div className="moves-grid">
+              <div className="numbers column">
+                {numberList.map((item, index) => (
                 <p key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
                   {item}
                 </p>
               ))}
-            </div>
-            <div className="chipotle-moves column">
-            {botMoves.map((item, index) => (
-                <p key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
-                  {item}
-                </p>
-              ))}
+              </div>
+              <div className="column">
+                {myMoves.map((item, index) => (
+                  <p key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
+                    {item}
+                  </p>
+                ))}
+                <div ref={movesEndRef} />
+              </div>
+              <div className="column">
+                {botMoves.map((item, index) => (
+                  <p key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
+                    {item}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
-          
         </div>
       : <button className="start-game" onClick={() => setGameStarted(true)}>
           Start Game

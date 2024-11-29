@@ -37,8 +37,11 @@ def make_player_move():
 @app.route('/make_computer_move', methods=['POST'])
 def make_computer_move():
     global board
-    move, outcome = playTurn(board)
-    return jsonify({'board': board.fen(), 'move': move.uci(), 'outcome': outcome})
+    move = MoveMaker.make_move(board)
+    move_san = board.san(move)
+    board.push(move)
+    outcome = board.outcome()
+    return jsonify({'board': board.fen(), 'move_san': move_san, 'outcome': outcome})
 
 
 @app.route('/get_board', methods=['GET'])
