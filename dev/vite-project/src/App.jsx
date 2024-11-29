@@ -1,6 +1,8 @@
 import './App.css'
 import { useState, useEffect, useRef } from 'react'
 import ChessBoard from './components/ChessBoard'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://127.0.0.1:5001/'; // Set Flask backend URL
@@ -95,7 +97,7 @@ function App() {
 
     } catch (error) {
       console.error('Error making move:', error);
-      alert('Invalid move');
+      toast.error('Invalid move');
     }
   }
 
@@ -121,7 +123,7 @@ function App() {
 
     } catch (error) {
       console.error('Error making move:', error);
-      alert('Invalid move');
+      toast.error('Invalid move');
     }
   }
 
@@ -135,6 +137,7 @@ function App() {
         <h1>ChipotleBot</h1>
         <h3>pay up,, sucker</h3>
       </div>
+      <ToastContainer autoClose={1000} hideProgressBar={true} />
       {gameStarted ?
         <div className="game">
           <div className="board">
@@ -145,12 +148,7 @@ function App() {
               setEndingSquare={setEndingSquare}
               submitDraggingMove={submitDraggingMove}
             />
-            <input
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyUp={handleKeyPress}
-              placeholder="Type your move and press Enter"
-            />
+            {/* move input would go here */}
           </div>
           <div className="moves-stats">
             <div className="moves-headers">
@@ -193,60 +191,11 @@ function App() {
 
 export default App;
 
-{/* 
-import './App.css'
-import { useState, useEffect } from 'react'
-import ChessBoard from './components/ChessBoard'
-
-function App() {
-  const [inputValue, setInputValue] = useState('');
-  const [gameStarted, setGameStarted] = useState(false);
-
-  useEffect(() => {
-    if (gameStarted) {
-      startGame();
-    }
-  }, [gameStarted])
-
-  const startGame = () => {
-    console.log('game started lol');
-  }
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  }
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-    }
-  }
-
-  // this is where my code should interact with the backend in the chipotlebot code
-  const handleSubmit = () => {
-    console.log('Input value: ', inputValue);
-    setInputValue('');
-  }
-
-  return (
-    <div className="app">
-      <div className="text">
-        <h1>ChipotleBot</h1>
-        <h3>pay up,, sucker</h3>
-      </div>
-      <button className="start-game" onClick={() => setGameStarted(true)}>
-        Start Game
-      </button>
-      {gameStarted ? <div className="board"> <ChessBoard /> </div>
-      : null}
-      <input
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyUp={handleKeyPress}
-      />
-    </div>
-  )
-}
-
-export default App
+{/* move input:
+<input
+  value={inputValue}
+  onChange={handleInputChange}
+  onKeyUp={handleKeyPress}
+  placeholder="Type your move and press Enter"
+/>
 */}
