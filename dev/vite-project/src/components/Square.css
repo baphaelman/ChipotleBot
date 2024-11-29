@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
 
 .white {
@@ -20,4 +21,13 @@
 img {
     width: 95%;
     height: 95%;
+    pointer-events: none;
+}
+
+.pieceful:hover {
+    cursor: pointer;
+}
+
+.dragging {
+    cursor: pointer;
 }

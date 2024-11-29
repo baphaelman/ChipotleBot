@@ -23,13 +23,26 @@ def start_game():
     board = chess.Board()
     return jsonify({'board': board.fen()})
 
-# NEW STUFF
 @app.route('/make_player_move', methods=['POST'])
 def make_player_move():
     global board
     move_san = request.json.get('move')
     try:
         board.push_san(move_san)
+        return jsonify({'board': board.fen(), 'move': move_san})
+    except (chess.IllegalMoveError, chess.InvalidMoveError):
+        return jsonify({'error': 'Invalid move'}), 400
+
+@app.route('/make_player_move_dragging', methods=['POST'])
+def make_player_move_dragging():
+    global board
+    move_uci = request.json.get('move')
+    try:
+        move = chess.Move.from_uci(move_uci)
+        if move not in board.legal_moves:
+            raise chess.IllegalMoveError(f"Illegal move: {move_uci}")
+        move_san = board.san(move)
+        board.push(move)
         return jsonify({'board': board.fen(), 'move': move_san})
     except (chess.IllegalMoveError, chess.InvalidMoveError):
         return jsonify({'error': 'Invalid move'}), 400

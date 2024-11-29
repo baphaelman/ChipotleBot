@@ -87,6 +87,7 @@ input {
 .moves-grid {
   width: 500px;
   height: 100%;
+  background-color: var(--off-white);
   border-radius: 8px;
   display: grid;
   grid-template-columns: 72px 0.75fr 1fr;

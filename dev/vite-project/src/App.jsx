@@ -14,6 +14,10 @@ function App() {
   const [botMoves, setBotMoves] = useState([]);
   const [moveNumber, setMoveNumber] = useState(1);
 
+  // for dragging and dropping
+  const [startingSquare, setStartingSquare] = useState('');
+  const [endingSquare, setEndingSquare] = useState('');
+
   const movesEndRef = useRef(null);
 
   // start game
@@ -28,10 +32,30 @@ function App() {
     scrollToBottom();
   }, [myMoves, botMoves]);
 
+  useEffect(() => {
+    if (startingSquare) {
+      console.log('starting: ', startingSquare);
+      console.log('ending: ', endingSquare);
+      submitDraggingMove();
+    }
+  }, [endingSquare])
+
+  {/*
+  const makeDragMove = (e) => {
+    if (startingSquare) {
+    console.log(startingSquare);
+      console.log(e.tile);
+        setEndingSquare(e.tile);
+        submitDraggingMove();
+    }
+  }
+    */}
+
   const startGame = async () => {
     try {
       const response = await axios.post('/start_game');
       setBoard(response.data.board);
+      console.log(board);
     } catch (error) {
       console.error('Error starting game:', error);
       alert('error starting game');
@@ -48,6 +72,33 @@ function App() {
     }
   };
 
+  const submitDraggingMove = async () => {
+    // player move
+    try {
+      const response_player = await axios.post('/make_player_move_dragging', { move: `${startingSquare}${endingSquare}` });
+      setBoard(response_player.data.board);
+      setMyMoves((prevMoves) => [...prevMoves, response_player.data.move]);
+      setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);
+      setMoveNumber(moveNumber + 1);
+      setStartingSquare('');
+      setEndingSquare('');
+
+      // computer move
+      try {
+        const response_bot = await axios.post('/make_computer_move');
+        setBoard(response_bot.data.board);
+        setBotMoves((prevMoves) => [...prevMoves, response_bot.data.move_san]);
+        setInputValue('');
+      } catch (error) {
+        console.error('Error making move:', error);
+      }
+
+    } catch (error) {
+      console.error('Error making move:', error);
+      alert('Invalid move');
+    }
+  }
+
   const handleSubmit = async () => {
     // player move
     try {
@@ -63,7 +114,6 @@ function App() {
         const response_bot = await axios.post('/make_computer_move');
         setBoard(response_bot.data.board);
         setBotMoves((prevMoves) => [...prevMoves, response_bot.data.move_san]);
-        console.log(botMoves);
         setInputValue('');
       } catch (error) {
         console.error('Error making move:', error);
@@ -88,7 +138,13 @@ function App() {
       {gameStarted ?
         <div className="game">
           <div className="board">
-            <ChessBoard fen={board} />
+            <ChessBoard
+              fen={board}
+              setStartingSquare={setStartingSquare}
+              endingSquare={endingSquare}
+              setEndingSquare={setEndingSquare}
+              submitDraggingMove={submitDraggingMove}
+            />
             <input
               value={inputValue}
               onChange={handleInputChange}

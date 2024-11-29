@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import './ChessBoard.css'
 import Square from './Square'
 import pieces from '../pieces.js'
 
-function ChessBoard({ fen }) {
+function ChessBoard({ fen, setStartingSquare, setEndingSquare, submitDraggingMove }) {
+    const [isDragging, setIsDragging] = useState(false);
+    const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
     const renderBoardFromFen = (fen) => {
         const squares = [];
@@ -12,6 +15,7 @@ function ChessBoard({ fen }) {
             for (let char of rows[row]) {
                 if (isNaN(char)) {
                     const color = (row + col) % 2 === 0 ? 'white' : 'black';
+                    const tile = `${alphabet[col]}${8 - row}`
                     let piece = null;
                     let pieceColor = null;
                     switch (char) {
@@ -66,13 +70,34 @@ function ChessBoard({ fen }) {
                         default:
                             break;
                     }
-                    squares.push(<Square key={`${row}-${col}`} color={color} piece={piece} pieceColor={pieceColor} />);
+                    squares.push(
+                        <Square
+                            key={tile}
+                            tile={tile}
+                            color={color}
+                            piece={piece}
+                            pieceColor={pieceColor}
+                            setStartingSquare={setStartingSquare}
+                            setEndingSquare={setEndingSquare}
+                            isDragging={isDragging}
+                            setIsDragging={setIsDragging}
+                        />
+                    );
                     col++;
                 } else {
                     const emptySquares = parseInt(char, 10);
                     for (let i = 0; i < emptySquares; i++) {
                         const color = (row + col) % 2 === 0 ? 'white' : 'black';
-                        squares.push(<Square key={`${row}-${col}`} color={color} />);
+                        const tile = `${alphabet[col]}${8 - row}`
+                        squares.push(<Square
+                            key={tile}
+                            tile={tile}
+                            color={color}
+                            setStartingSquare={setStartingSquare}
+                            setEndingSquare={setEndingSquare}
+                            isDragging={isDragging}
+                            setIsDragging={setIsDragging}
+                            />);
                         col++;
                     }
                 }
