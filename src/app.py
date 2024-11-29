@@ -30,7 +30,7 @@ def make_player_move():
     move_san = request.json.get('move')
     try:
         board.push_san(move_san)
-        return jsonify({'board': board.fen()})
+        return jsonify({'board': board.fen(), 'move': move_san})
     except (chess.IllegalMoveError, chess.InvalidMoveError):
         return jsonify({'error': 'Invalid move'}), 400
 

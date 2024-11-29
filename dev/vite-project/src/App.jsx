@@ -9,7 +9,10 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [gameStarted, setGameStarted] = useState(false);
   const [board, setBoard] = useState('8/8/8/8/8/8/8/8');
-  const [computerMove, setComputerMove] = useState('');
+  const [numberList, setNumberList] =  useState(['sum']);
+  const [myMoves, setMyMoves] = useState(['My Moves']);
+  const [botMoves, setBotMoves] = useState(["ChipotleBot's Moves"]);
+  const [moveNumber, setMoveNumber] = useState(1);
 
   useEffect(() => {
     if (gameStarted) {
@@ -42,13 +45,16 @@ function App() {
     try {
       const response = await axios.post('/make_player_move', { move: inputValue });
       setBoard(response.data.board);
+      setMyMoves((prevMoves) => [...prevMoves, response.data.move]);
+      setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);
+      setMoveNumber(moveNumber + 1);
       setInputValue('');
 
       // computer move
     try {
       const response = await axios.post('/make_computer_move');
       setBoard(response.data.board);
-      setComputerMove(response.data.move);
+      setBotMoves((prevMoves) => [...prevMoves, response.data.move]);
       setInputValue('');
     } catch (error) {
       console.error('Error making move:', error);
@@ -79,22 +85,25 @@ function App() {
           </div>
           <div className="moves-grid">
             <div className="numbers column">
-              <p>.</p>
-              <p className="odd">1.</p>
-              <p>2.</p>
-              <p className="odd">3.</p>
+              {numberList.map((item, index) => (
+              <p key={index} className={index === 0 ? 'zero' : index % 2 === 0 ? 'even' : 'odd'}>
+                {item}
+              </p>
+            ))}
             </div>
             <div className="my-moves column">
-              <p>My Move</p>
-              <p className="odd">e4</p>
-              <p>Qxg7</p>
-              <p className="odd">Rhe3</p>
+              {myMoves.map((item, index) => (
+                <p key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
+                  {item}
+                </p>
+              ))}
             </div>
             <div className="chipotle-moves column">
-              <p>ChipotleBot's Move</p>
-              <p className="odd">.{computerMove}</p>
-              <p>e5</p>
-              <p className="odd">gxe7</p>
+            {botMoves.map((item, index) => (
+                <p key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
+                  {item}
+                </p>
+              ))}
             </div>
           </div>
           

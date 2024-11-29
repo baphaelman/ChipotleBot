@@ -83,3 +83,7 @@ input {
 .odd {
   background-color: white;
 }
+
+.zero {
+  color: transparent;
+}
