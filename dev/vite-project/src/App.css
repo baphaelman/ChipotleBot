@@ -20,8 +20,21 @@ body {
   gap: 20px;
 }
 
-.text {
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 8em;
   width: 100vw;
+  gap: 20px;
+}
+
+.top img {
+  height: 100px;
+  width: auto;
+}
+
+.text {
   text-align: center;
   color: var(--cream);
   text-decoration: bold;

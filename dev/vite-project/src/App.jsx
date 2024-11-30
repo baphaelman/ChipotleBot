@@ -35,23 +35,10 @@ function App() {
   }, [myMoves, botMoves]);
 
   useEffect(() => {
-    if (startingSquare) {
-      console.log('starting: ', startingSquare);
-      console.log('ending: ', endingSquare);
+    if (startingSquare && (startingSquare != endingSquare)) {
       submitDraggingMove();
     }
   }, [endingSquare])
-
-  {/*
-  const makeDragMove = (e) => {
-    if (startingSquare) {
-    console.log(startingSquare);
-      console.log(e.tile);
-        setEndingSquare(e.tile);
-        submitDraggingMove();
-    }
-  }
-    */}
 
   const startGame = async () => {
     try {
@@ -133,9 +120,12 @@ function App() {
 
   return (
     <div className="app">
-      <div className="text">
-        <h1>ChipotleBot</h1>
-        <h3>pay up,, sucker</h3>
+      <div className="top">
+        <img src="chipotlebot_logo.png" />
+        <div className="text">
+          <h1>ChipotleBot</h1>
+          <h3>pay up,, sucker</h3>
+        </div>
       </div>
       <ToastContainer autoClose={1000} hideProgressBar={true} />
       {gameStarted ?
