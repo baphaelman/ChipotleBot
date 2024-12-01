@@ -1,11 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './ChessBoard.css'
 import Square from './Square'
 import pieces from '../pieces.js'
 
-function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, halfMoveNumber, selected, setSelected }) {
-    const [isDragging, setIsDragging] = useState(false);
+function ChessBoard({ fen, startingSquare, setStartingSquare, setEndingSquare, highlighted, halfMoveNumber, selected, setSelected }) {
     const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const [isDragging, setIsDragging] = useState(false);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [draggingPiece, setDraggingPiece] = useState(null);
+    const [hasMouseMoved, setHasMouseMoved] = useState(false);
+
+    const handleMouseMove = (e) => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+        setHasMouseMoved(true);
+    }
+
+    useEffect(() => {
+        if (isDragging) {
+            window.addEventListener('mousemove', handleMouseMove);
+        } else {
+            window.removeEventListener('mousemove', handleMouseMove);
+            setHasMouseMoved(false);
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [isDragging]);
 
     const renderBoardFromFen = (fen) => {
         const squares = [];
@@ -77,6 +98,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, half
                             color={color}
                             piece={piece}
                             pieceColor={pieceColor}
+                            startingSquare={startingSquare}
                             setStartingSquare={setStartingSquare}
                             setEndingSquare={setEndingSquare}
                             isDragging={isDragging}
@@ -84,6 +106,8 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, half
                             isHighlighted={highlighted[halfMoveNumber].includes(tile)}
                             selected={selected}
                             setSelected={setSelected}
+                            setDraggingPiece={setDraggingPiece}
+                            hasMouseMoved={hasMouseMoved}
                         />
                     );
                     col++;
@@ -96,6 +120,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, half
                             key={tile}
                             tile={tile}
                             color={color}
+                            startingSquare={setStartingSquare}
                             setStartingSquare={setStartingSquare}
                             setEndingSquare={setEndingSquare}
                             isDragging={isDragging}
@@ -103,6 +128,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, half
                             isHighlighted={highlighted[halfMoveNumber].includes(tile)}
                             selected={selected}
                             setSelected={setSelected}
+                            hasMouseMoved={hasMouseMoved}
                             />);
                         col++;
                     }
@@ -115,6 +141,14 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, half
     return (
         <div className="square-grid">
             {renderBoardFromFen(fen)}
+            {isDragging && draggingPiece && hasMouseMoved && (
+                <img
+                    src={draggingPiece}
+                    alt="dragging chess piece"
+                    className="dragging-piece"
+                    style={{ position: 'fixed', left: mousePosition.x, top: mousePosition.y, pointerEvents: 'none' }}
+                />
+            )}
         </div>
     )
 }

@@ -11,13 +11,20 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [gameStarted, setGameStarted] = useState(false);
   const [board, setBoard] = useState('8/8/8/8/8/8/8/8');
+
+  // for table rows
   const [numberList, setNumberList] =  useState([]);
   const [myMoves, setMyMoves] = useState([]);
   const [botMoves, setBotMoves] = useState([]);
-  const [moveNumber, setMoveNumber] = useState(1);
+
+  const [moveNumber, setMoveNumber] = useState(1); // for going backwards/forwards
+
+  // for highlighting squares
   const [highlighted, setHighlighted] = useState([[]]);
-  const [halfMoveNumber, setHalfMoveNumber] = useState(0); // for highlighted squares, I guess
-  const [selected, setSelected] = useState([]); // list of currently selected squares (right clicking)
+  const [halfMoveNumber, setHalfMoveNumber] = useState(0);
+
+  // list of currently selected squares (right clicking)
+  const [selected, setSelected] = useState([]);
 
   // for dragging and dropping
   const [startingSquare, setStartingSquare] = useState('');
@@ -196,6 +203,7 @@ function App() {
             </div>
             <ChessBoard
               fen={board}
+              startingSquare={startingSquare}
               setStartingSquare={setStartingSquare}
               setEndingSquare={setEndingSquare}
               highlighted={highlighted}

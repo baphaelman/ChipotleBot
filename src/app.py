@@ -8,11 +8,6 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})  # Allow React origin
 board = chess.Board()
 
-def playTurn(board) -> Tuple[chess.Move, chess.Outcome]:
-    move = MoveMaker.make_move(board)
-    board.push(move)
-    return move, board.outcome()
-
 @app.route('/')
 def index():
     return "Flask server is running!"
@@ -85,6 +80,8 @@ def prev_board():
     if curr_board_index > 0:
         curr_board_index -= 1
         board = board_states[curr_board_index]
+    else:
+        raise Exception("Cannot go to previous board state")
     return jsonify({'board': board.fen()})
 
 @app.route('/next_board', methods=['POST'])
@@ -95,6 +92,8 @@ def next_board():
     if curr_board_index < len(board_states) - 1:
         curr_board_index += 1
         board = board_states[curr_board_index]
+    else:
+        raise Exception("Cannot go to next board state")
     return jsonify({'board': board.fen()})
 
 @app.route('/undo', methods=['POST'])
@@ -109,8 +108,7 @@ def undo():
     board.pop()
     board_states.pop()
     board_states.pop()
-    curr_board_index -= 1
-    curr_board_index -= 1
+    curr_board_index -= 2
     return jsonify({'board': board.fen()})
 
 @app.route('/get_board', methods=['GET'])

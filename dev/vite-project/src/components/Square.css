@@ -51,3 +51,10 @@ img {
     background: rgba(255, 0, 0, 0.5); /* Semi-transparent red overlay */
     pointer-events: none; /* Ensure the overlay does not interfere with interactions */
 }
+
+.dragging-piece {
+    width: 71.25px;
+    height: 71.25px;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+  }
