@@ -31,3 +31,7 @@ img {
 .dragging {
     cursor: pointer;
 }
+
+.highlighted {
+    background: rgba(255, 0, 0, 0.5);
+}

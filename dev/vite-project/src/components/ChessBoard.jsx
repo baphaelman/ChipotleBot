@@ -3,7 +3,7 @@ import './ChessBoard.css'
 import Square from './Square'
 import pieces from '../pieces.js'
 
-function ChessBoard({ fen, setStartingSquare, setEndingSquare, submitDraggingMove }) {
+function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted }) {
     const [isDragging, setIsDragging] = useState(false);
     const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -15,7 +15,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, submitDraggingMov
             for (let char of rows[row]) {
                 if (isNaN(char)) {
                     const color = (row + col) % 2 === 0 ? 'white' : 'black';
-                    const tile = `${alphabet[col]}${8 - row}`
+                    const tile = `${alphabet[col]}${8 - row}`;
                     let piece = null;
                     let pieceColor = null;
                     switch (char) {
@@ -81,6 +81,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, submitDraggingMov
                             setEndingSquare={setEndingSquare}
                             isDragging={isDragging}
                             setIsDragging={setIsDragging}
+                            isHighlighted={highlighted.includes(tile)}
                         />
                     );
                     col++;
@@ -97,6 +98,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, submitDraggingMov
                             setEndingSquare={setEndingSquare}
                             isDragging={isDragging}
                             setIsDragging={setIsDragging}
+                            isHighlighted={highlighted.includes(tile)}
                             />);
                         col++;
                     }

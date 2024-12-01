@@ -54,12 +54,28 @@ def make_player_move_dragging():
         if move not in board.legal_moves:
             raise chess.IllegalMoveError(f"Illegal move: {move_uci}")
         move_san = board.san(move)
+        highlighted = [chess.SQUARE_NAMES[move.from_square], chess.SQUARE_NAMES[move.to_square]]
         board.push(move)
         board_states.append(board.copy())
         curr_board_index += 1
-        return jsonify({'board': board.fen(), 'move': move_san})
+        return jsonify({'board': board.fen(), 'move': move_san, 'highlighted': highlighted})
     except (chess.IllegalMoveError, chess.InvalidMoveError):
         return jsonify({'error': 'Invalid move'}), 400
+
+@app.route('/make_computer_move', methods=['POST'])
+def make_computer_move():
+    global board
+    global board_states
+    global curr_board_index
+
+    move = MoveMaker.make_move(board)
+    highlighted = [chess.SQUARE_NAMES[move.from_square], chess.SQUARE_NAMES[move.to_square]]
+    move_san = board.san(move)
+    board.push(move)
+    board_states.append(board.copy())
+    curr_board_index += 1
+    outcome = board.outcome()
+    return jsonify({'board': board.fen(), 'move_san': move_san, 'outcome': outcome, 'highlighted': highlighted})
 
 @app.route('/prev_board', methods=['POST'])
 def prev_board():
@@ -96,21 +112,6 @@ def undo():
     curr_board_index -= 1
     curr_board_index -= 1
     return jsonify({'board': board.fen()})
-
-@app.route('/make_computer_move', methods=['POST'])
-def make_computer_move():
-    global board
-    global board_states
-    global curr_board_index
-
-    move = MoveMaker.make_move(board)
-    move_san = board.san(move)
-    board.push(move)
-    board_states.append(board.copy())
-    curr_board_index += 1
-    outcome = board.outcome()
-    return jsonify({'board': board.fen(), 'move_san': move_san, 'outcome': outcome})
-
 
 @app.route('/get_board', methods=['GET'])
 def get_board():
