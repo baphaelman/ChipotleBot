@@ -147,6 +147,8 @@ function App() {
 
     } catch (error) {
       console.error('Error making move:', error);
+      setStartingSquare('');
+      setEndingSquare('');
       toast.error('Invalid move');
     }
   }

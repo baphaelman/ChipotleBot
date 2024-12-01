@@ -9,7 +9,7 @@ function ChessBoard({ fen, startingSquare, setStartingSquare, setEndingSquare, h
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [draggingPiece, setDraggingPiece] = useState(null);
     const [hasMouseMoved, setHasMouseMoved] = useState(false);
-
+   
     const handleMouseMove = (e) => {
         setMousePosition({ x: e.clientX, y: e.clientY });
         setHasMouseMoved(true);

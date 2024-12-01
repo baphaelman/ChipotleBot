@@ -41,7 +41,7 @@ const Square = ({ tile, color, piece, pieceColor, startingSquare, setStartingSqu
                 handleSelection(); // Call the selection handler
             }}
         >
-            {piece && !(startingSquare === tile) && <img src={sprite} alt="chess piece" />}
+            {piece && (!(startingSquare === tile) || !hasMouseMoved) && <img src={sprite} alt="chess piece" />}
         </div>
     )
 }
