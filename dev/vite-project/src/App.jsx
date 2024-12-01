@@ -61,6 +61,24 @@ function App() {
     }
   };
 
+  const handleBackButton = async () => {
+    try {
+      const response = await axios.post('/prev_board');
+      setBoard(response.data.board);
+    } catch (error) {
+      console.error('Error visualizing previous board:', error);
+    }
+  }
+
+  const handleForwardButton = async () => {
+    try {
+      const response = await axios.post('/next_board');
+      setBoard(response.data.board);
+    } catch (error) {
+      console.error('Error visualizing next board:', error);
+    }
+  }
+
   const submitDraggingMove = async () => {
     // player move
     try {
@@ -131,6 +149,10 @@ function App() {
       {gameStarted ?
         <div className="game">
           <div className="board">
+            <div className="boardstate-buttons">
+              <button className="back button" onClick={handleBackButton}> Previous Move </button>
+              <button className="forward button" onClick={handleForwardButton}> Next Move </button>
+            </div>
             <ChessBoard
               fen={board}
               setStartingSquare={setStartingSquare}

@@ -2,7 +2,8 @@ import chess
 from MoveMaker import MoveMaker
 from typing import Tuple
 
-def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
+def playGame(board: chess.Board, player_color: chess.Colo, board_states: list[chess.Board]) -> chess.Outcome:
+    move_number = 0
     computer_color = not player_color
     outcome = None
     move = None
@@ -31,6 +32,8 @@ def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
                 continue
             try:
                 board.push_san(my_move)
+                board_states.append(board.copy())
+                move_number += 1
                 retry = False
                 break
             except (chess.IllegalMoveError, chess.InvalidMoveError):
@@ -45,6 +48,7 @@ def playGame(board: chess.Board, player_color: chess.Color) -> chess.Outcome:
         
         # computer's move
         move, outcome, san = playTurn(board)
+        move_number += 1
     
     if outcome.winner == computer_color: # show final board if computer wins on their move
         print(board.unicode())
@@ -71,7 +75,8 @@ def printOutcome(outcome) -> None:
 
 def main() -> None:
     board = chess.Board()
-    outcome = playGame(board, chess.WHITE)
+    board_states = []
+    outcome = playGame(board, chess.WHITE, board_states)
     printOutcome(outcome)
 
 if __name__ == "__main__":
