@@ -15,13 +15,22 @@ function App() {
   const [myMoves, setMyMoves] = useState([]);
   const [botMoves, setBotMoves] = useState([]);
   const [moveNumber, setMoveNumber] = useState(1);
-  const [highlighted, setHighlighted] = useState([]);
+  const [highlighted, setHighlighted] = useState([[]]);
+  const [halfMoveNumber, setHalfMoveNumber] = useState(0); // for highlighted squares, I guess
 
   // for dragging and dropping
   const [startingSquare, setStartingSquare] = useState('');
   const [endingSquare, setEndingSquare] = useState('');
 
   const movesEndRef = useRef(null);
+
+  useEffect(() => {
+    console.log('half-move number:', halfMoveNumber);
+  }, [halfMoveNumber]);
+
+  useEffect(() => {
+    console.log('half-move number:', highlighted);
+  }, [highlighted]);
 
   // start game
   useEffect(() => {
@@ -66,6 +75,7 @@ function App() {
     try {
       const response = await axios.post('/prev_board');
       setBoard(response.data.board);
+      setHalfMoveNumber(halfMoveNumber - 1);
     } catch (error) {
       console.error('Error visualizing previous board:', error);
     }
@@ -75,6 +85,7 @@ function App() {
     try {
       const response = await axios.post('/next_board');
       setBoard(response.data.board);
+      setHalfMoveNumber(halfMoveNumber + 1);
     } catch (error) {
       console.error('Error visualizing next board:', error);
     }
@@ -87,6 +98,8 @@ function App() {
       setMyMoves((prevMoves) => prevMoves.slice(0, -1)); // remove last player moves
       setBotMoves((prevMoves) => prevMoves.slice(0, -1)); // remove last bot moves
       setNumberList((prevNums) => prevNums.slice(0, -1)); // remove last numbers
+      setHalfMoveNumber(halfMoveNumber - 2);
+      setHighlighted((prevHighlighted) => prevHighlighted.slice(0, -2)); // remove last highlighted squares
       setMoveNumber(moveNumber - 1);
     } catch (error) {
       console.error('Error undoing move:', error);
@@ -101,7 +114,8 @@ function App() {
       setMyMoves((prevMoves) => [...prevMoves, response_player.data.move]);
       setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);
       setMoveNumber(moveNumber + 1);
-      setHighlighted(response_player.data.highlighted);
+      setHalfMoveNumber((prevHalfMoveNumber) => prevHalfMoveNumber + 1);
+      setHighlighted((prevHighlighted) => [...prevHighlighted, response_player.data.highlighted]);
       setStartingSquare('');
       setEndingSquare('');
 
@@ -110,7 +124,8 @@ function App() {
         const response_bot = await axios.post('/make_computer_move');
         setBoard(response_bot.data.board);
         setBotMoves((prevMoves) => [...prevMoves, response_bot.data.move_san]);
-        setHighlighted(response_bot.data.highlighted);
+        setHighlighted((prevHighlighted) => [...prevHighlighted, response_bot.data.highlighted]);
+        setHalfMoveNumber((prevHalfMoveNumber) => prevHalfMoveNumber + 1);
         setInputValue('');
       } catch (error) {
         console.error('Error making move:', error);
@@ -178,6 +193,7 @@ function App() {
               setEndingSquare={setEndingSquare}
               highlighted={highlighted}
               setHighlighted={setHighlighted}
+              halfMoveNumber={halfMoveNumber}
             />
             {/* move input would go here */}
           </div>

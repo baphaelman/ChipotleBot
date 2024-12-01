@@ -3,7 +3,7 @@ import './ChessBoard.css'
 import Square from './Square'
 import pieces from '../pieces.js'
 
-function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted }) {
+function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted, halfMoveNumber }) {
     const [isDragging, setIsDragging] = useState(false);
     const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -81,7 +81,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted }) {
                             setEndingSquare={setEndingSquare}
                             isDragging={isDragging}
                             setIsDragging={setIsDragging}
-                            isHighlighted={highlighted.includes(tile)}
+                            isHighlighted={highlighted[halfMoveNumber].includes(tile)}
                         />
                     );
                     col++;
@@ -98,7 +98,7 @@ function ChessBoard({ fen, setStartingSquare, setEndingSquare, highlighted }) {
                             setEndingSquare={setEndingSquare}
                             isDragging={isDragging}
                             setIsDragging={setIsDragging}
-                            isHighlighted={highlighted.includes(tile)}
+                            isHighlighted={highlighted[halfMoveNumber].includes(tile)}
                             />);
                         col++;
                     }
