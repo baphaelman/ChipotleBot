@@ -17,6 +17,7 @@ function App() {
   const [moveNumber, setMoveNumber] = useState(1);
   const [highlighted, setHighlighted] = useState([[]]);
   const [halfMoveNumber, setHalfMoveNumber] = useState(0); // for highlighted squares, I guess
+  const [selected, setSelected] = useState([]); // list of currently selected squares (right clicking)
 
   // for dragging and dropping
   const [startingSquare, setStartingSquare] = useState('');
@@ -54,7 +55,12 @@ function App() {
     try {
       const response = await axios.post('/start_game');
       setBoard(response.data.board);
-      console.log(board);
+      setNumberList([]);
+      setMyMoves([]);
+      setBotMoves([]);
+      setMoveNumber(1);
+      setHighlighted([[]]);
+      setHalfMoveNumber(0);
     } catch (error) {
       console.error('Error starting game:', error);
       alert('error starting game');
@@ -113,11 +119,12 @@ function App() {
       setBoard(response_player.data.board);
       setMyMoves((prevMoves) => [...prevMoves, response_player.data.move]);
       setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);
-      setMoveNumber(moveNumber + 1);
+      setMoveNumber(moveNumber + 1); // ok because only called once in this function
       setHalfMoveNumber((prevHalfMoveNumber) => prevHalfMoveNumber + 1);
       setHighlighted((prevHighlighted) => [...prevHighlighted, response_player.data.highlighted]);
       setStartingSquare('');
       setEndingSquare('');
+      setSelected([]);
 
       // computer move
       try {
@@ -168,7 +175,7 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className="app" onClick={() => setSelected([])}>
       <div className="top">
         <img src="chipotlebot_logo.png" />
         <div className="text">
@@ -192,8 +199,9 @@ function App() {
               setStartingSquare={setStartingSquare}
               setEndingSquare={setEndingSquare}
               highlighted={highlighted}
-              setHighlighted={setHighlighted}
               halfMoveNumber={halfMoveNumber}
+              selected={selected}
+              setSelected={setSelected}
             />
             {/* move input would go here */}
           </div>
