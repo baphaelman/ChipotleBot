@@ -79,6 +79,18 @@ function App() {
     }
   }
 
+  const handleUndo = async () => {
+    try {
+      const response = await axios.post('/undo');
+      setBoard(response.data.board);
+      setMyMoves((prevMoves) => prevMoves.slice(0, -1)); // remove last player moves
+      setBotMoves((prevMoves) => prevMoves.slice(0, -1)); // remove last bot moves
+      setNumberList((prevNums) => prevNums.slice(0, -1)); // remove last numbers
+    } catch (error) {
+      console.error('Error undoing move:', error);
+    }
+  }
+
   const submitDraggingMove = async () => {
     // player move
     try {
@@ -149,9 +161,12 @@ function App() {
       {gameStarted ?
         <div className="game">
           <div className="board">
-            <div className="boardstate-buttons">
-              <button className="back button" onClick={handleBackButton}> Previous Move </button>
-              <button className="forward button" onClick={handleForwardButton}> Next Move </button>
+            <div className="board-buttons">
+              <button className="undo" onClick={handleUndo} title="undo"/>
+              <div className="boardstate-buttons">
+                <button className="back button" onClick={handleBackButton} title="back"/>
+                <button className="forward button" onClick={handleForwardButton} title="forward"/>
+              </div>
             </div>
             <ChessBoard
               fen={board}

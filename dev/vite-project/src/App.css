@@ -2,6 +2,7 @@
   --bg: rgb(47, 47, 47);
   --cream: rgb(255, 250, 244);
   --off-white: rgb(241 241 241);
+  --pre-hover-grey: #A8A8A8;
   --chipotle-red: rgb( 169 21 18);
   --chipotle-burgundy: rgb(70 20 0);
 }
@@ -59,9 +60,9 @@ body {
 .board {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 
 .game {
@@ -81,20 +82,65 @@ input {
   border-radius: 8px;
 }
 
+.board-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.undo {
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: 16px;
+  color: var(--pre-hover-grey);
+  transition: all ease 0.25s;
+  background: url('undo-grey.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+}
+
+.undo:hover {
+  background: url('undo-white.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--off-white);
+  cursor: pointer;
+}
+
 .boardstate-buttons {
   display: flex;
-  width: 100%;
   gap: 20px;
 }
 
 .button {
-  width: 100%;
-  height: 40px;
+  width: 32px;
+  height: 32px;
+  background: url('arrow-grey.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  transition: all ease 0.25s;
+}
+
+.forward {
+  transform: rotate(180deg);
+}
+
+.button:hover {
+  cursor: pointer;
+  background: url('arrow-white.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* moves grid */
 .moves-stats {
-  height: 600px;
+  height: 648px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -111,7 +157,7 @@ input {
 
 .moves-grid {
   width: 500px;
-  height: 100%;
+  height: 600px;
   background-color: var(--off-white);
   border-radius: 8px;
   display: grid;
