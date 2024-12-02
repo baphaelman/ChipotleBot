@@ -27,6 +27,7 @@ function App() {
   const [selected, setSelected] = useState([]);
 
   // for dragging and dropping
+  const [pieceMoved, setPieceMoved] = useState(null);
   const [startingSquare, setStartingSquare] = useState('');
   const [endingSquare, setEndingSquare] = useState('');
 
@@ -122,7 +123,8 @@ function App() {
   const submitDraggingMove = async () => {
     // player move
     try {
-      const response_player = await axios.post('/make_player_move_dragging', { move: `${startingSquare}${endingSquare}` });
+      const move_uci = startingSquare + endingSquare;
+      const response_player = await axios.post('/make_player_move_dragging', { move: `${move_uci}`});
       setBoard(response_player.data.board);
       setMyMoves((prevMoves) => [...prevMoves, response_player.data.move]);
       setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);

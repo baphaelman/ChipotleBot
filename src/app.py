@@ -43,7 +43,11 @@ def make_player_move_dragging():
     if curr_board_index < len(board_states) - 1:
         raise Exception("Cannot make a move while not on current board state")
     
+    # PAWN PROMOTION UCI MANIPULATION HERE
     move_uci = request.json.get('move')
+    if board.piece_at(chess.SQUARE_NAMES.index(move_uci[:2])) is chess.PAWN and move_uci[2] in ['1', '7']:
+        move_uci += 'q'
+        
     try:
         move = chess.Move.from_uci(move_uci)
         if move not in board.legal_moves:
