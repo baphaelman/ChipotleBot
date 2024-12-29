@@ -1,5 +1,6 @@
 import chess
 from piece_weights import *
+from openings_parser import read_openings
 
 # Evaluates the position of the baord
 class Evaluator:
@@ -15,9 +16,12 @@ class Evaluator:
 
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
 
+    def __init__(self):
+        self.openings_dict = read_openings()
+        print(self.openings_dict['e4'])
+
     # Simply sums the piece weights of the player's and the opponent's pieces
-    @staticmethod
-    def evaluate(board: chess.Board) -> int:
+    def evaluate(self, board: chess.Board) -> int:
         eval = 0
         color = board.turn
 
@@ -41,7 +45,7 @@ class Evaluator:
                 eval -= other_weights[i][other_piece]
         return eval
     
-    def pawn_evaluation(board: chess.Board) -> int:
+    def pawn_evaluation(self, board: chess.Board) -> int:
         color = board.turn
         return_value = 0
         if color == chess.WHITE:

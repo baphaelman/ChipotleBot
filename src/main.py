@@ -2,7 +2,7 @@ import chess
 from MoveMaker import MoveMaker
 from typing import Tuple
 
-def playGame(board: chess.Board, player_color: chess.Colo, board_states: list[chess.Board]) -> chess.Outcome:
+def playGame(board: chess.Board, player_color: chess.Color, board_states: list[chess.Board]) -> chess.Outcome:
     move_number = 0
     computer_color = not player_color
     outcome = None
@@ -74,7 +74,9 @@ def printOutcome(outcome) -> None:
 
 
 def main() -> None:
-    board = chess.Board()
+    # board = chess.Board()
+    # board = chess.Board('8/8/8/8/8/8/4k3/RR5K w Q - 0 1')
+    board = chess.Board('8/8/8/4K3/rr5k/8/8/8 w - - 0 1')
     board_states = []
     outcome = playGame(board, chess.WHITE, board_states)
     printOutcome(outcome)
