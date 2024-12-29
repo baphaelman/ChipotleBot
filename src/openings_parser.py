@@ -3,8 +3,8 @@ import csv
 
 def read_openings():
     openings_raw = []
-    with open('openings.csv', newline='') as csvfile:
-        reader = csv.reader(csvfile)
+    with open('openings.tsv', newline='') as tsvfile:
+        reader = csv.reader(tsvfile, delimiter="\t")
         for row in reader:
             openings_raw.append(row)
     

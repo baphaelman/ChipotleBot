@@ -41,7 +41,6 @@ class MoveMaker:
                 next_moves = self.evaluator.openings_dict[moves_str]
                 next_move = random.choice(next_moves)
                 next_next_move = random.choice(next_moves)
-                print(f'next moves: {next_moves}, next move: {next_move}, next next move: {next_next_move}')
 
                 # this seems convoluted but I needed to translate the san into a chess.Move lolll
                 board.push_san(next_move)
