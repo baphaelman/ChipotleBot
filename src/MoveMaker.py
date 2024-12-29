@@ -35,12 +35,11 @@ class MoveMaker:
         best_move = None
         best_eval = float('-inf')
 
-        if len(moves) < 123456789:
+        if len(moves) <= 36: # 36 moves is the longest set of moves in the openigns dictionary
             moves_str = ' '.join(moves)
             if moves_str in self.evaluator.openings_dict:
                 next_moves = self.evaluator.openings_dict[moves_str]
                 next_move = random.choice(next_moves)
-                next_next_move = random.choice(next_moves)
 
                 # this seems convoluted but I needed to translate the san into a chess.Move lolll
                 board.push_san(next_move)

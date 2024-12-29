@@ -10,8 +10,7 @@
 # MoveMaker
 - [x] Write tests, make sure minimax algorithm is,, actually working
 - [x] Implement alpha-beta pruning on make_move
-- [ ] import a TON of pro games and have the bot follow them as long as possible
-- [ ] ^^ or just manny well-established openings
+- [x] import a TON of pro games and have the bot follow them as long as possible (or just manny well-established openings)
 
 - [ ] When it finds a forced mate, play those moves instead of just knowing you have it lol dummy
 - [ ] Implement quiescent search

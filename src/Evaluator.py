@@ -18,7 +18,6 @@ class Evaluator:
 
     def __init__(self):
         self.openings_dict = read_openings()
-        print(self.openings_dict['e4'])
 
     # Simply sums the piece weights of the player's and the opponent's pieces
     def evaluate(self, board: chess.Board) -> int:
