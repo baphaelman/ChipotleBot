@@ -15,13 +15,31 @@ class Evaluator:
     queenWeight = 1100
 
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
+    canonical_evals = [1, 3, 3, 5, 9]
 
     def __init__(self):
         self.openings_dict = read_openings()
+    
+    def canonical_evaluate(self, board: chess.Board) -> int:
+        result = self.naive_evaluate(board, Evaluator.canonical_evals)
+        if board.turn == chess.BLACK:
+            result *= -1
+        return result
+    
+    def naive_evaluate(self, board: chess.Board, weights) -> int:
+        eval = 0
+        color = board.turn
+
+        for i in range(1, 6):
+            curr_pieces = board.pieces(i, color)
+            other_curr_pieces = board.pieces(i, not color)
+            eval += len(curr_pieces) * weights[i - 1] # iterate through my pieces
+            eval -= len(other_curr_pieces) * weights[i - 1] # iterate through opponent's pieces
+        return eval
 
     # Simply sums the piece weights of the player's and the opponent's pieces
     def evaluate(self, board: chess.Board) -> int:
-        eval = 0
+        eval = self.naive_evaluate(board, Evaluator.evals)
         color = board.turn
 
         if color == chess.WHITE:
@@ -34,8 +52,6 @@ class Evaluator:
         for i in range(1, 6):
             curr_pieces = board.pieces(i, color)
             other_curr_pieces = board.pieces(i, not color)
-            eval += len(curr_pieces) * Evaluator.evals[i - 1] # iterate through my pieces
-            eval -= len(other_curr_pieces) * Evaluator.evals[i - 1] # iterate through opponent's pieces
 
             # consider positional value
             for piece in curr_pieces:

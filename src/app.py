@@ -9,6 +9,7 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})  # Allow Reac
 board = chess.Board()
 moves = [] # to search through openings
 move_maker = MoveMaker()
+evals = []
 
 @app.route('/')
 def index():
@@ -28,7 +29,10 @@ def start_game():
     global moves
     moves = []
 
-    return jsonify({'board': board.fen()})
+    global evals
+    evals = [move_maker.evaluator.canonical_evaluate(board)]
+
+    return jsonify({'board': board.fen(), 'evaluation': evals[0]})
 
 @app.route('/make_player_move', methods=['POST'])
 def make_player_move():
@@ -39,7 +43,10 @@ def make_player_move():
         board.push_san(move_san)
         global moves
         moves.append(move_san)
-        return jsonify({'board': board.fen(), 'move': move_san})
+
+        global evals
+        evals.append(move_maker.evaluator.canonical_evaluate(board))
+        return jsonify({'board': board.fen(), 'move': move_san, 'evaluation': evals[-1]})
     except (chess.IllegalMoveError, chess.InvalidMoveError):
         return jsonify({'error': 'Invalid move'}), 400
 
@@ -69,7 +76,10 @@ def make_player_move_dragging():
 
         global moves
         moves.append(move_san)
-        return jsonify({'board': board.fen(), 'move': move_san, 'highlighted': highlighted})
+
+        global evals
+        evals.append(move_maker.evaluator.canonical_evaluate(board))
+        return jsonify({'board': board.fen(), 'move': move_san, 'highlighted': highlighted, 'evaluation': evals[-1]})
     except (chess.IllegalMoveError, chess.InvalidMoveError):
         return jsonify({'error': 'Invalid move'}), 400
 
@@ -91,31 +101,39 @@ def make_computer_move():
     board_states.append(board.copy())
     curr_board_index += 1
     outcome = board.outcome()
-    return jsonify({'board': board.fen(), 'move_san': move_san, 'outcome': outcome, 'highlighted': highlighted})
+
+    global evals
+    evals.append(move_maker.evaluator.canonical_evaluate(board))
+    print(evals[-1])
+    return jsonify({'board': board.fen(), 'move_san': move_san, 'outcome': outcome, 'highlighted': highlighted, 'evaluation': evals[-1]})
 
 @app.route('/prev_board', methods=['POST'])
 def prev_board():
     global board
     global board_states
     global curr_board_index
+    global evals
     if curr_board_index > 0:
         curr_board_index -= 1
         board = board_states[curr_board_index]
     else:
         raise Exception("Cannot go to previous board state")
-    return jsonify({'board': board.fen()})
+    print('THIS THIS THIS', evals, curr_board_index)
+    return jsonify({'board': board.fen(), 'evaluation': evals[curr_board_index]})
 
 @app.route('/next_board', methods=['POST'])
 def next_board():
     global board
     global board_states
     global curr_board_index
+    global evals
     if curr_board_index < len(board_states) - 1:
         curr_board_index += 1
         board = board_states[curr_board_index]
     else:
         raise Exception("Cannot go to next board state")
-    return jsonify({'board': board.fen()})
+    print('THIS THIS THIS', evals, curr_board_index)
+    return jsonify({'board': board.fen(), 'evaluation': evals[curr_board_index]})
 
 @app.route('/undo', methods=['POST'])
 def undo():
@@ -129,17 +147,23 @@ def undo():
     global moves
     moves.pop()
     moves.pop()
+
+    global evals
+    evals.pop()
+    evals.pop()
+
     board.pop()
     board.pop()
     board_states.pop()
     board_states.pop()
     curr_board_index -= 2
-    return jsonify({'board': board.fen()})
+    return jsonify({'board': board.fen(), 'evaluation': evals[-1]})
 
 @app.route('/get_board', methods=['GET'])
 def get_board():
     global board
-    return jsonify({'board': board.fen()})
+    global evals
+    return jsonify({'board': board.fen(), 'evaluation': evals[-1]})
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)

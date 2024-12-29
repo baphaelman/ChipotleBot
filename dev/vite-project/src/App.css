@@ -73,6 +73,16 @@ body {
   height: 570px;
 }
 
+.greeny {
+  color: rgb(149, 255, 149);
+}
+.reddy {
+  color: rgb(255, 74, 74);
+}
+.whitey {
+  color: white;
+}
+
 input {
   height: 20px;
   width: 100%;

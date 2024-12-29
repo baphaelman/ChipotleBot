@@ -11,6 +11,7 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [gameStarted, setGameStarted] = useState(false);
   const [board, setBoard] = useState('8/8/8/8/8/8/8/8');
+  const [evaluation, setEvaluation] = useState(0);
 
   // for table rows
   const [numberList, setNumberList] =  useState([]);
@@ -32,14 +33,6 @@ function App() {
   const [endingSquare, setEndingSquare] = useState('');
 
   const movesEndRef = useRef(null);
-
-  useEffect(() => {
-    console.log('half-move number:', halfMoveNumber);
-  }, [halfMoveNumber]);
-
-  useEffect(() => {
-    console.log('half-move number:', highlighted);
-  }, [highlighted]);
 
   // start game
   useEffect(() => {
@@ -69,6 +62,7 @@ function App() {
       setMoveNumber(1);
       setHighlighted([[]]);
       setHalfMoveNumber(0);
+      setEvaluation(0);
     } catch (error) {
       console.error('Error starting game:', error);
       alert('error starting game');
@@ -90,6 +84,7 @@ function App() {
       const response = await axios.post('/prev_board');
       setBoard(response.data.board);
       setHalfMoveNumber(halfMoveNumber - 1);
+      setEvaluation(response.data.evaluation);
     } catch (error) {
       console.error('Error visualizing previous board:', error);
     }
@@ -100,6 +95,7 @@ function App() {
       const response = await axios.post('/next_board');
       setBoard(response.data.board);
       setHalfMoveNumber(halfMoveNumber + 1);
+      setEvaluation(response.data.evaluation);
     } catch (error) {
       console.error('Error visualizing next board:', error);
     }
@@ -115,6 +111,7 @@ function App() {
       setHalfMoveNumber(halfMoveNumber - 2);
       setHighlighted((prevHighlighted) => prevHighlighted.slice(0, -2)); // remove last highlighted squares
       setMoveNumber(moveNumber - 1);
+      setEvaluation(response.data.evaluation);
     } catch (error) {
       console.error('Error undoing move:', error);
     }
@@ -134,6 +131,7 @@ function App() {
       setStartingSquare('');
       setEndingSquare('');
       setSelected([]);
+      setEvaluation(response_player.data.evaluation);
 
       // computer move
       try {
@@ -143,6 +141,7 @@ function App() {
         setHighlighted((prevHighlighted) => [...prevHighlighted, response_bot.data.highlighted]);
         setHalfMoveNumber((prevHalfMoveNumber) => prevHalfMoveNumber + 1);
         setInputValue('');
+        setEvaluation(response_bot.data.evaluation);
       } catch (error) {
         console.error('Error making move:', error);
       }
@@ -164,6 +163,7 @@ function App() {
       setNumberList((prevNums) => [...prevNums, moveNumber.toString() + '.']);
       setMoveNumber(moveNumber + 1);
       setInputValue('');
+      setEvaluation(response_player.data.evaluation);
 
       // computer move
       try {
@@ -171,6 +171,7 @@ function App() {
         setBoard(response_bot.data.board);
         setBotMoves((prevMoves) => [...prevMoves, response_bot.data.move_san]);
         setInputValue('');
+        setEvaluation(response_bot.data.evaluation);
       } catch (error) {
         console.error('Error making move:', error);
       }
@@ -197,6 +198,7 @@ function App() {
       <ToastContainer autoClose={1000} hideProgressBar={true} />
       {gameStarted ?
         <div className="game">
+          <div style={{width: '16px', fontSize: '1.25em'}} className={evaluation > 0 ? 'greeny' : evaluation < 0 ? 'reddy' : 'whitey'}>{evaluation > 0 ? '+' + evaluation : evaluation}</div>
           <div className="board">
             <div className="board-buttons">
               <button className="undo" onClick={handleUndo} title="undo"/>
