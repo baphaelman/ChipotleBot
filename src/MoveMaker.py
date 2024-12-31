@@ -8,10 +8,11 @@ class MoveMaker:
     # make_move(chess.BitBoard) -> chess.Move: given a board, returns the best move to make, kickstarts search
     # search(int, chess.Board) -> int: recursive function that implements the minimax algorithm
 
-    num_searched = 0
-
     def __init__(self):
         self.evaluator = Evaluator()
+        self.num_searched = 0
+        self.num_quiesced = 0
+        self.longest_search = []
 
     def depth_function(self, num_pieces: int) -> int:
         return int((-0.06 * num_pieces) + 5.95)
@@ -23,9 +24,9 @@ class MoveMaker:
         # num_pieces = len(board.piece_map())
         # depth = MoveMaker.depth_function(num_pieces)
         num_moves = len(list(board.legal_moves))
-        depth = self.depth_function_moves(num_moves)
+        depth = self.depth_function_moves(num_moves) + self.num_quiesced
         # print(f'num moves: {num_moves}')
-        print(f'depth searched: {depth}')
+        # print(f'depth searched: {depth}')
 
         color = board.turn
 
@@ -47,12 +48,16 @@ class MoveMaker:
             else:
                 print('not in openings')
 
+        move_count = board.legal_moves.count()
+        i = 0
         for move in board.legal_moves:
+            print(f'completed {i}/{move_count} of search')
+            i += 1
             if not best_move:
                 best_move = move
             
             board.push(move)
-            eval = -1 * self.search(depth - 1, board, alpha, beta)
+            eval = -1 * self.search(depth - 1, board, alpha, beta, 0, [move.uci()])
             if eval > best_eval:
                 best_eval = eval
                 best_move = move
@@ -68,24 +73,42 @@ class MoveMaker:
                     break
         
         # print(f'alpha number searched: {MoveMaker.num_searched}')
+        print(f'quiescence count: {self.num_quiesced}')
+        # print(f'fen: {board.fen()}')
+        print(f'longest search: {self.longest_search} {len(self.longest_search)}')
         self.num_searched = 0
         return best_move
 
-    def search(self, depth: int, board: chess.Board, alpha: int, beta: int) -> int:
+    def search(self, depth: int, board: chess.Board, alpha: int, beta: int, extensions: int, moves_tracker: list) -> int:
         # base cases
         if board.is_game_over():
             self.num_searched += 1
             return float('-inf')
         if depth == 0:
             self.num_searched += 1
+
+            # quiescence count and lists
+            if extensions > self.num_quiesced:
+                self.num_quiesced = extensions
+            if len(moves_tracker) > len(self.longest_search):
+                self.longest_search = moves_tracker
             return self.evaluator.evaluate(board)
         
         color = board.turn
         
         most_significant_eval = float('-inf')
         for move in board.legal_moves:
+            # quiescent search
+            quiesce = self.is_quiescent_move(depth, move, board)
+            new_moves_tracker = moves_tracker.copy()
+            new_moves_tracker.append(move.uci())
+            
             board.push(move)
-            eval = -1 * self.search(depth - 1, board, alpha, beta)
+            if quiesce:
+                # print('quiescing', extensions + 1)
+                eval = -1 * self.search(depth, board, alpha, beta, extensions + 1, new_moves_tracker)
+            else:
+                eval = -1 * self.search(depth - 1, board, alpha, beta, extensions, new_moves_tracker)
             most_significant_eval = max(most_significant_eval, eval)
             board.pop()
 
@@ -99,3 +122,6 @@ class MoveMaker:
                 if -1 * alpha <= beta:
                     break
         return most_significant_eval
+    
+    def is_quiescent_move(self, depth: int, move: chess.Move, board: chess.Board) -> bool:
+        return depth == 1 and (board.is_capture(move) or board.gives_check(move))
