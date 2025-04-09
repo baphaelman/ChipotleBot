@@ -1,4 +1,5 @@
 # ChipotleBot
+<img width="1466" alt="Screenshot 2025-04-09 at 3 13 30 PM" src="https://github.com/user-attachments/assets/b0135557-57b1-45c1-8450-56cf889c6af3" />
 
 A chessbot that will hopefully beat a friend of mine and win me two Chipotle meals. For now, a scrappy game simulator against a decent opponent in the terminal lol. Made using the [python chess library](https://python-chess.readthedocs.io/en/latest/) and inspired HEAVILY by [Sebastian Lague's amazing videos on chessbots](https://www.youtube.com/playlist?list=PLFt_AvWsXl0cvHyu32ajwh2qU1i6hl77c).
 
