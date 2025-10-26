@@ -5,7 +5,7 @@ from MoveMaker import MoveMaker
 from typing import Tuple
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://chipotlebot.onrender.com/"}})  # Allow React origin
+CORS(app)# , resources={r"/*": {"origins": "https://chipotlebot.onrender.com/"}})  # Allow React origin
 board = chess.Board()
 moves = [] # to search through openings
 move_maker = MoveMaker()
@@ -166,4 +166,6 @@ def get_board():
     return jsonify({'board': board.fen(), 'evaluation': evals[-1]})
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    import os
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host="0.0.0.0", port=port)
