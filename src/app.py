@@ -5,7 +5,7 @@ from .MoveMaker import MoveMaker
 from typing import Tuple
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["http://localhost:5001", "https://your-deployed-frontend.example"]}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5001", "https://chipotlebot.onrender.com/"]}})
 board = chess.Board()
 moves = [] # to search through openings
 move_maker = MoveMaker()
