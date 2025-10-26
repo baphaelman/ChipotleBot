@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import chess
-from MoveMaker import MoveMaker
+from .MoveMaker import MoveMaker
 from typing import Tuple
 
 app = Flask(__name__)
