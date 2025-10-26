@@ -3,7 +3,7 @@
 - [x] make this the backend for a react page where you can drag and drop the pieces
 
 # Frontend
-- [ ] add (naive) point evaluator to board
+- [x] add (naive) point evaluator to board
 - [ ] add ability to click to move
 - [ ] add ability to premove
 
@@ -13,7 +13,7 @@
 - [x] import a TON of pro games and have the bot follow them as long as possible (or just manny well-established openings)
 
 - [ ] When it finds a forced mate, play those moves instead of just knowing you have it lol dummy
-- [ ] Implement quiescent search
+- [x] Implement quiescent search
 - [ ] improve endgame (move towards other king, for example)
 
 # Evaluator

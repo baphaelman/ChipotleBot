@@ -15,6 +15,9 @@ class Evaluator:
     queenWeight = 1100
 
     evals = [pawnWeight, knightWeight, bishopWeight, rookWeight, queenWeight]
+
+    piece_to_string = {chess.PAWN: 'P', chess.KNIGHT: 'N', chess.BISHOP: 'B', chess.ROOK: 'R', chess.QUEEN: 'Q', chess.KING: 'K'}
+    string_to_weight = {'P': evals[0], 'N': evals[1], 'B': evals[2], 'R': evals[3], 'Q': evals[4], 'K': 200}
     canonical_evals = [1, 3, 3, 5, 9]
 
     def __init__(self):
@@ -78,3 +81,12 @@ class Evaluator:
         for pawn in other_pawn_pieces:
             return_value -= other_pawn_board[pawn]
         return return_value
+    
+    def start_weight_from_move(board, move: chess.Move) -> int:
+        piece_string = board.san(move)[0]
+        if piece_string.lower() == piece_string: # if pawn, basically
+            return Evaluator.evals[0]
+        elif piece_string == 'O': # castling
+            return 0
+        else:
+            return Evaluator.string_to_weight[piece_string]
